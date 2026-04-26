@@ -110,16 +110,16 @@ public class Planets{
             gen.max += 2;
         });
 
-        tantros = new Planet("tantros", sun, 1f, 2){{
+        tantros = new Planet("tantros", sun, 1f){{
             generator = new TantrosPlanetGenerator();
             meshLoader = () -> new HexMesh(this, 6);
             cloudMeshLoader = () -> new MultiMesh(
                     new HexSkyMesh(this, 2, 0.35f, 0.07f, 7, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.75f), 1, 0.35f, 2f, 0.36f),
                     new HexSkyMesh(this, 1, 0.6f, 0.16f, 5, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.75f), 2, 0.45f, 1f, 0.41f)
             );
-            accessible = true;
+            accessible = false;
             visible = true;
-            alwaysUnlocked = true;
+            alwaysUnlocked = false;
             atmosphereColor = Color.valueOf("3db899");
             iconColor = Color.valueOf("597be3");
             startSector = 10;

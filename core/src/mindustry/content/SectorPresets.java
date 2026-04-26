@@ -256,13 +256,13 @@ public class SectorPresets{
 
         //endregion
         // tantros
-        landing = new SectorPreset("landing", tantros, 10){{
-            alwaysUnlocked = true;
-            difficulty = 0;
-            captureWave = 0;
-            overrideLaunchDefaults = true;
-            //startWaveTimeMultiplier = 3f;
-        }};
+//        landing = new SectorPreset("landing", tantros, 10){{
+//            alwaysUnlocked = true;
+//            difficulty = 0;
+//            captureWave = 0;
+//            overrideLaunchDefaults = true;
+//            //startWaveTimeMultiplier = 3f;
+//        }};
 
         /*temple = new SectorPreset("temple", tantros, 14){{
             difficulty = 4;

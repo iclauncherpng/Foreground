@@ -188,7 +188,7 @@ public class PlanetDialog extends BaseDialog implements PlanetInterfaceRenderer{
                 var group = new ButtonGroup<>();
                 group.setMinCheckCount(0);
                 state.planet = Planets.sun;
-                Planet[] choices = {Planets.serpulo, Planets.erekir, Planets.tantros};
+                Planet[] choices = {Planets.serpulo, Planets.erekir};
                 int i = 0;
                 for(var planet : choices){
                     TextureRegion tex = new TextureRegion(planetTextures[i]);
@@ -217,8 +217,8 @@ public class PlanetDialog extends BaseDialog implements PlanetInterfaceRenderer{
             }
         });
 
-        planetTextures = new Texture[3];
-        String[] names = {"sprites/planets/serpulo.png", "sprites/planets/erekir.png", "sprites/planets/tantros.png"};
+        planetTextures = new Texture[2];
+        String[] names = {"sprites/planets/serpulo.png", "sprites/planets/erekir.png"};
         for(int i = 0; i < names.length; i++){
             int fi = i;
             assets.load(names[i], Texture.class, new TextureParameter(){{
