@@ -166,8 +166,8 @@ public class Rules{
     public Seq<ItemStack> loadout = ItemStack.list(Items.copper, 100);
     /** Weather events that occur here. */
     public Seq<WeatherEntry> weather = new Seq<>(1);
-    /** Dynamic events that occur here. */
-    public Seq<EventEntry> dynamicEvents = new Seq<>();
+    /** Dynamic events that occur here. Possibly in v1.1.0 */
+    //public Seq<EventEntry> dynamicEvents = new Seq<>();
     /** Blocks that cannot be placed. */
     public ObjectSet<Block> bannedBlocks = new ObjectSet<>();
     /** Units that cannot be built. */
@@ -381,19 +381,19 @@ public class Rules{
             }
         }
     }
-
-    public static class EventEntry {
-        public DynamicEvent event;
-        public float minFrequency = 60f * 5, maxFrequency = 60f * 15;
-        public float minDuration = 60f * 1, maxDuration = 60f * 3;
-        public float chance = 0f;
-        public @Nullable Weather requiredWeather;
-
-        public EventEntry(DynamicEvent event){
-            this.event = event;
-        }
-        public EventEntry(){}
-    }
+    //TODO: add this in next major update
+//    public static class EventEntry {
+//        public DynamicEvent event;
+//        public float minFrequency = 60f * 5, maxFrequency = 60f * 15;
+//        public float minDuration = 60f * 1, maxDuration = 60f * 3;
+//        public float chance = 0f;
+//        public @Nullable Weather requiredWeather;
+//
+//        public EventEntry(DynamicEvent event){
+//            this.event = event;
+//        }
+//        public EventEntry(){}
+//    }
 
     /** A simple map for storing TeamRules in an efficient way without hashing. */
     public static class TeamRules implements JsonSerializable{
