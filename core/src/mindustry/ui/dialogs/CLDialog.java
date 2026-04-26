@@ -24,10 +24,10 @@ public class CLDialog extends BaseDialog {
         cont.table(tabs -> {
             tabs.defaults().growX().height(50f).pad(4f);
 
-            String[] types = {"Release", "Beta", "Alpha", "BE", "Legacy"};
+            String[] types = {"Release", "Beta", "Alpha"};
 
             for(String type : types){
-                boolean isAvailable = type.equals("Alpha") || type.equals("Legacy");
+                boolean isAvailable = type.equals("Alpha");
 
                 var cell = tabs.button(type, Styles.togglet, () -> {
                     activeTab = type;
@@ -53,12 +53,10 @@ public class CLDialog extends BaseDialog {
 
         if (activeTab.equals("Alpha")) {
             //addSpecialRow(listTable, "[scarlet]⚠ Important:[] Mods do NOT work in this [orange]build[]! Don't try to activate them.");
-            addSpecialRow(listTable, "[orange]⚠ Warning:[] This is [red]indev[] build! Do not report crashes and errors.");
-            //addSpecialRow(listTable, "[#42b3f5]⚠ Info:[] The finalization of the diplomatic mode is in progress");
+            //addSpecialRow(listTable, "[orange]⚠ Warning:[] This is [red]indev[] build! Do not report crashes and errors.");
 
-            addRelease(listTable, "v1.0.0 [#f54242]Alpha", "indev", 0.50f, new String[]{
-                    "[#42b3f5]!!!!ALPHA!!!!",
-                    "Diplomacy rework",
+            addRelease(listTable, "v1.0.0 [#f54242]Alpha", "26.04.2026", new String[]{
+                    "The first part of the diplomacy rework",
                     "Render fixes",
                     "Some UI changes",
                     "Mobile MainMenu changes",
@@ -72,13 +70,12 @@ public class CLDialog extends BaseDialog {
                     "Diplomacy additions. Tower blocks and territory system",
                     "Diplomacy Fixes",
                     "Territories are now displayed on the minimap",
-                    "The first part of the diplomacy rework is complete",
                     "Render optimization",
                     "Menu background changes",
                     "Tech tree appearance rework",
                     "Big Optimizations",
                     "New Settings for territory layer",
-                    "Arc modifications (TerritoryRender.java)",
+                    "Arc modifications",
                     "Weather rework",
             });
         }
