@@ -16,7 +16,7 @@ public enum ContentType{
     status(StatusEffect.class),
     unit(UnitType.class),
     weather(Weather.class),
-    event(DynamicEvent.class),
+    //event(DynamicEvent.class),
     effect_UNUSED(null),
     sector(SectorPreset.class),
     loadout_UNUSED(null),

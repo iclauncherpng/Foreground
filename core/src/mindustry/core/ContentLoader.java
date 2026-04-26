@@ -65,16 +65,16 @@ public class ContentLoader{
         Bullets.load();
         UnitTypes.load();
         Blocks.load();
-        TantrosBlocks.load();
+        //TantrosBlocks.load();
         TantrosTurrets.load();
         Loadouts.load();
         Weathers.load();
-        DEvents.load();
+        //DEvents.load();
         Planets.load();
         SectorPresets.load();
         SerpuloTechTree.load();
         ErekirTechTree.load();
-        TantrosTechTree.load();
+        //TantrosTechTree.load();
     }
 
     /** Creates mod content, if applicable. */
@@ -408,15 +408,15 @@ public class ContentLoader{
         return getByName(ContentType.unitCommand, name);
     }
 
-    public Seq<DynamicEvent> events(){
-        return getBy(ContentType.event);
-    }
-
-    public DynamicEvent event(int id){
-        return getByID(ContentType.event, id);
-    }
-
-    public DynamicEvent event(String name){
-        return getByName(ContentType.event, name);
-    }
+//    public Seq<DynamicEvent> events(){
+//        return getBy(ContentType.event);
+//    }
+//
+//    public DynamicEvent event(int id){
+//        return getByID(ContentType.event, id);
+//    }
+//
+//    public DynamicEvent event(String name){
+//        return getByName(ContentType.event, name);
+//    }
 }

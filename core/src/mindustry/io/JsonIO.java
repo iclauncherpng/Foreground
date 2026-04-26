@@ -266,17 +266,17 @@ public class JsonIO{
             }
         });
 
-        json.setSerializer(DynamicEvent.class, new Serializer<>(){
-            @Override
-            public void write(Json json, DynamicEvent object, Class knownType){
-                json.writeValue(object.name);
-            }
-
-            @Override
-            public DynamicEvent read(Json json, JsonValue jsonData, Class type){
-                return Vars.content.getByName(ContentType.event, jsonData.asString());
-            }
-        });
+//        json.setSerializer(DynamicEvent.class, new Serializer<>(){
+//            @Override
+//            public void write(Json json, DynamicEvent object, Class knownType){
+//                json.writeValue(object.name);
+//            }
+//
+//            @Override
+//            public DynamicEvent read(Json json, JsonValue jsonData, Class type){
+//                return Vars.content.getByName(ContentType.event, jsonData.asString());
+//            }
+//        });
 
         json.setSerializer(MapObjectives.class, new Serializer<>(){
             @Override
