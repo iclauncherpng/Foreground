@@ -581,44 +581,39 @@ public class Block extends UnlockableContent implements Senseable{
 
     /** @return whether this block can be placed on the specified tile. */
     public boolean canPlaceOn(Tile tile, Team team, int rotation){
-        if(devMode || !state.rules.diplomacy) return true;
-
-        boolean inAnyZone = false;
-        boolean inOwnZone = false;
-
-        for(Building b : Groups.build){
-            if(TerritorySystem.territoryBlocks.containsKey(b.block)){
-                float radius = TerritorySystem.territoryBlocks.get(b.block, 0f);
-                float bx = b.x, by = b.y;
-
-                if(b.block.size % 2 == 0){
-                    bx -= 4f;
-                    by -= 4f;
-                }
-
-                float side = radius * Mathf.cosDeg(45f);
-
-                if(Math.abs(tile.worldx() - bx) <= side && Math.abs(tile.worldy() - by) <= side){
-                    inAnyZone = true;
-
-                    if(b.team == team){
-                        inOwnZone = true;
-                    }else{
-                        return false;
-                    }
-                }
-            }
-        }
-
-        if(inOwnZone) return true;
-        if(!inAnyZone && this instanceof TradeConveyor) return true;
-
-        return false;
+        return true;
     }
 
     /** @return whether this block can be broken on the specified tile. */
     public boolean canBreak(Tile tile){
         return true;
+    }
+
+
+    public final boolean checkPlacementFull(Tile tile, Team team, int rotation){
+        if(!devMode && state.rules.diplomacy){
+            boolean inAnyZone = false;
+            boolean inOwnZone = false;
+            for(Building b : Groups.build){
+                if(TerritorySystem.territoryBlocks.containsKey(b.block)){
+                    float radius = TerritorySystem.territoryBlocks.get(b.block, 0f);
+                    float bx = b.x, by = b.y;
+                    if(b.block.size % 2 == 0){ bx -= 4f; by -= 4f; }
+
+                    float side = radius * 0.7071f; // Mathf.cosDeg(45f)
+
+                    if(Math.abs(tile.worldx() - bx) <= side && Math.abs(tile.worldy() - by) <= side){
+                        inAnyZone = true;
+                        if(b.team == team) inOwnZone = true;
+                        else return false;
+                    }
+                }
+            }
+            if(!inOwnZone && !inAnyZone && !(this instanceof TradeConveyor)) return false;
+        }
+
+
+        return canPlaceOn(tile, team, rotation);
     }
 
     public boolean rotatedOutput(int x, int y){

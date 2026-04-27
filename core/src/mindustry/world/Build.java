@@ -5,6 +5,7 @@ import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
+import mindustry.Vars;
 import mindustry.annotations.Annotations.*;
 import mindustry.content.*;
 import mindustry.entities.*;
@@ -181,6 +182,12 @@ public class Build{
 
     /** @return whether a tile can be placed at this location by this team. Ignores units at this location. */
     public static boolean validPlaceIgnoreUnits(Block type, Team team, int x, int y, int rotation, boolean checkVisible, boolean checkCoreRadius){
+        if(!Vars.devMode && !state.rules.editor && state.rules.diplomacy){
+            if(type != null && !type.checkPlacementFull(world.tile(x, y), team, rotation)){
+                return false;
+            }
+        }
+
         //the wave team can build whatever they want as long as it's visible - banned blocks are not applicable
         if(type == null || (!state.rules.editor && (checkVisible && (!type.environmentBuildable() || (!type.isPlaceable() && !(state.rules.waves && team == state.rules.waveTeam && type.isVisible())))))){
             return false;
