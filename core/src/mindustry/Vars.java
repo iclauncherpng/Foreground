@@ -76,7 +76,7 @@ public class Vars implements Loadable{
     /** global charset, since Android doesn't support the Charsets class */
     public static final Charset charset = Charset.forName("UTF-8");
     /** main application name, capitalized */
-    public static final String appName = "Mindustry";
+    public static final String appName = "Foreground";
     /** Github API URL. */
     public static final String[] ghApis = {"http://192.168.31.86:3000/api/v1", "http://127.0.0.1:3000/api/v1"};
     public static String ghApi = getWorkingApi();

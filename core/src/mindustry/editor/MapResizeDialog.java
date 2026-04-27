@@ -56,8 +56,15 @@ public class MapResizeDialog extends BaseDialog{
         buttons.defaults().size(200f, 50f);
         buttons.button("@cancel", this::hide);
         buttons.button("@ok", () -> {
-            cons.get(width, height, shiftX, shiftY);
-            hide();
+            if(width > 600 || height > 600){
+                ui.showConfirm("@mapsize.warning", "@mapsize.warning.text", () -> {
+                    cons.get(width, height, shiftX, shiftY);
+                    hide();
+                });
+            }else{
+                cons.get(width, height, shiftX, shiftY);
+                hide();
+            }
         });
     }
 

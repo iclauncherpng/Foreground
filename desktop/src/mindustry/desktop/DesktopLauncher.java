@@ -50,7 +50,7 @@ public class DesktopLauncher extends ClientLauncher{
             checkJavaVersion();
 
             new SdlApplication(new DesktopLauncher(arg), new SdlConfig(){{
-                title = "Mindustry";
+                title = "Foreground";
                 maximized = true;
                 coreProfile = true;
                 width = 900;
