@@ -504,6 +504,13 @@ public class Logic implements ApplicationListener{
                 state.envAttrs.add(state.rules.attributes);
                 Groups.weather.each(w -> state.envAttrs.add(w.weather.attrs, w.opacity));
 
+                if(state.isGame() && !state.isPaused() && state.rules.diplomacy && !net.client()){
+                    Groups.build.each(build -> {
+                        boolean inZone = build.block.checkPlacementFull(build.tile, build.team, build.rotation);
+                        build.enabled = inZone;
+                    });
+                }
+
                 PerfCounter.entityUpdate.begin();
                 Groups.update();
                 PerfCounter.entityUpdate.end();
