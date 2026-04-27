@@ -43,6 +43,7 @@ public enum Gamemode{
         rules.coreCapture = true;
     }, map -> map.teams.size > 1),
     editor(false, rules -> {
+        rules.canModifyWorld = true;
         rules.infiniteResources = true;
         rules.instantBuild = true;
         rules.editor = true;
