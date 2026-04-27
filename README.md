@@ -1,5 +1,7 @@
 # This is a fork of my own schizo-posting. Don’t even try to understand what’s written here; I’ll forget it myself in a week. If anyone actually forks this fork, I’ll be absolutely floored.
 
+At the moment, this fork doesn't add much content just a new game mode and some technical refinements.
+
 ![Logo](core/assets-raw/sprites/ui/logo.png)
 
 [![Build Status](https://github.com/Anuken/Mindustry/workflows/Tests/badge.svg?event=push)](https://github.com/Anuken/Mindustry/actions)
