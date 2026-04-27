@@ -7045,7 +7045,7 @@ public class Blocks{
 
         dipTowerTear1 = new TowerBlock("diplomacy-tower-t1"){{
             //tier = 1;
-            requirements(Category.effect, with(Items.copper, 450, Items.silicon, 500, Items.titanium, 350));
+            requirements(Category.effect, with(Items.copper, 450, Items.silicon, 250, Items.titanium, 350));
             buildVisibility = BuildVisibility.diplomacyOnly;
             size = 1;
             health = 500;
@@ -7053,7 +7053,7 @@ public class Blocks{
 
         dipTowerTear2 = new TowerBlock("diplomacy-tower-t2"){{
             tier = 2;
-            requirements(Category.effect, with(Items.copper, 950, Items.silicon, 1100, Items.titanium, 550));
+            requirements(Category.effect, with(Items.copper, 950, Items.silicon, 800, Items.titanium, 550));
             buildVisibility = BuildVisibility.diplomacyOnly;
             size = 2;
             health = 1200;
@@ -7061,7 +7061,7 @@ public class Blocks{
 
         dipTowerTear3 = new TowerBlock("diplomacy-tower-t3"){{
             tier = 3;
-            requirements(Category.effect, with(Items.copper, 1450, Items.silicon, 2500, Items.titanium, 1350, Items.phaseFabric, 500));
+            requirements(Category.effect, with(Items.copper, 1450, Items.silicon, 1700, Items.titanium, 1350, Items.phaseFabric, 550));
             buildVisibility = BuildVisibility.diplomacyOnly;
             size = 3;
             health = 2800;
