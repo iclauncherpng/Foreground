@@ -161,8 +161,8 @@ public class MenuFragment{
                     container.add(new MobileButton(Icon.left, "@back", showMain))
                             .colspan(2)
                             .fillX()
-                            .width((size * 2) + (5f * 2)) // Расчет точной ширины: две кнопки + два отступа.
-                            .height(size / 2f); // Сплюснутая высота
+                            .width((size * 2) + (5f * 2)) 
+                            .height(size / 2f); 
                 }else{
                     container.add(new MobileButton(Icon.left, "@back", showMain));
                 }
@@ -188,8 +188,8 @@ public class MenuFragment{
                     container.add(new MobileButton(Icon.left, "@back", showMain))
                             .colspan(2)
                             .fillX()
-                            .width((size * 2) + (5f * 2)) // Точная ширина
-                            .height(size / 2f); // Сплюснутая высота
+                            .width((size * 2) + (5f * 2)) 
+                            .height(size / 2f); 
                 }else{
                     container.add(new MobileButton(Icon.left, "@back", showMain));
                 }

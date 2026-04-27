@@ -31,7 +31,7 @@ public class MenuRenderer implements Disposable{
         params.camPos.set(Tmp.v31).scl(dist);
         params.camPos.add(
                 Mathf.sin(time, 150f, 0.2f),
-                0.5f, // Приподнимаем камеру
+                0.5f, 
                 Mathf.cos(time, 150f, 0.2f)
         );
         params.camUp.set(Vec3.Y);

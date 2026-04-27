@@ -135,7 +135,7 @@ public class TantrosBlocks {
         underWaterDuct = new Duct("underwater-duct"){{
             requirements(Category.distribution, with(Items.copper, 1));
             health = 10;
-            speed = 500f / 60f; // В Mindustry скорость обычно считается так (4 предмета в сек)
+            speed = 500f / 60f; 
             researchCost = with(Items.copper, 5);
         }};
 
@@ -150,7 +150,7 @@ public class TantrosBlocks {
         underWaterDuctv2 = new Duct("underwater-ductv2"){{
             requirements(Category.distribution, with(Items.copper, 3, Items.titanium, 2));
             health = 35;
-            speed = 280f / 60f; // В Mindustry скорость обычно считается так (4 предмета в сек)
+            speed = 280f / 60f; 
             researchCost = with(Items.copper, 95, Items.titanium, 50);
         }};
 

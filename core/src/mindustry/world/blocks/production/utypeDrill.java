@@ -58,7 +58,7 @@ public class utypeDrill extends Block{
     /** Speed the drill bit rotates at. */
     public float rotateSpeed = 2f;
 
-    public float pressure; // значение 0-1
+    public float pressure; 
     /** Effect randomly played while drilling. */
     public Effect updateEffect = Fx.pulverizeSmall;
     /** Chance the update effect will appear. */
@@ -306,15 +306,15 @@ public class utypeDrill extends Block{
                 warmup = Mathf.approachDelta(warmup, speed, warmupSpeed);
                 progress += delta() * dominantItems * speed * warmup;
 
-                if(warmup > 0.1f && Mathf.chance(0.001)) {  // шанс 1% вместо 5%
-                    for(int i = 0; i < 2; i++) {  // всего 2 частицы вместо кучи
+                if(warmup > 0.1f && Mathf.chance(0.001)) {  
+                    for(int i = 0; i < 2; i++) {  
                         float xPos = x + Mathf.range(size * 2f);
                         float yPos = y + Mathf.range(size * 2f);
 
                         Fx.pulverizeSmall.at(xPos, yPos, 0f, dominantItem != null ? dominantItem.color : Pal.accent);
                     }
 
-                    if(Mathf.chance(0.03f)) {  // 10% от шанса основного
+                    if(Mathf.chance(0.03f)) {  
                         Fx.drillSteam.at(x + Mathf.range(size * 2f), y + Mathf.range(size * 2f));
                     }
                 }

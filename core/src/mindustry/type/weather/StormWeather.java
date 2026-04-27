@@ -48,7 +48,7 @@ public class StormWeather extends RainWeather {
     private void strike(WeatherState state){
         float tx = Mathf.random(Vars.world.unitWidth());
         float ty = Mathf.random(Vars.world.unitHeight());
-        float skyHeight = 200f; // Подняли повыше для длины
+        float skyHeight = 200f; 
         for(int i = 0; i < 2; i++){
             Fx.lightning.at(tx, ty + skyHeight, 270f, Color.white);
         }

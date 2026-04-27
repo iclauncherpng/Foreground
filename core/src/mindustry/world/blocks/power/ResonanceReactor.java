@@ -20,7 +20,7 @@ import static mindustry.Vars.*;
 public class ResonanceReactor extends NuclearReactor {
     public float resonanceSpeed = 0.0002f;
     public float stabilityFall = 0.002f;
-    public float stabilityRestore = 0.0006f; // Добавил сюда, чтобы Build видел
+    public float stabilityRestore = 0.0006f; 
     public float pulseRadius = 240f;
     public float pulseDamage = 500f;
 
@@ -106,7 +106,7 @@ public class ResonanceReactor extends NuclearReactor {
         public void pulse(){
             if(resonance < 0.2f) return;
 
-            Sounds.explosionNavanax.at(this, 1.2f, 1.2f); // Громкость и тон
+            Sounds.explosionNavanax.at(this, 1.2f, 1.2f); 
 
             Fx.launchAccelerator.at(x, y, pulseRadius, Pal.accent);
             Fx.lancerLaserCharge.at(x, y, resonance * 180f, Pal.accent);

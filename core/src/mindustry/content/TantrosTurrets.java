@@ -19,7 +19,7 @@ public class TantrosTurrets {
 
     public static void load() {
         piercing = new PowerTurret("piercing"){{
-            requirements(Category.turret, with(Items.copper, 50, Items.lead, 25));
+            requirements(Category.experiments, with(Items.copper, 50, Items.lead, 25));
 
             size = 1;
             health = 250;
@@ -43,14 +43,14 @@ public class TantrosTurrets {
                 pierceBuilding = false;
 
                 sprite = "bullet";
-                frontColor = Color.valueOf("4e6781");
-                backColor = Color.valueOf("324d64");
+                frontColor = Color.valueOf("ffffff");
+                backColor = Color.valueOf("ffffff");
 
                 lightRadius = 0f;
                 lightOpacity = 0f;
                 trailWidth = 1.8f;
                 trailLength = 20;
-                trailColor = Color.valueOf("324d64").a(0.6f);
+                trailColor = Color.valueOf("ffffff").a(0.6f);
                 hitEffect = Fx.hitLiquid;
                 despawnEffect = Fx.bubble;
 

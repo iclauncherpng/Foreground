@@ -19,7 +19,7 @@ public class TantrosMoonGenerator extends PlanetGenerator {
         cSpec = Color.valueOf("84f4ff");
 
     {
-        baseSeed = 2; // Свой сид для спутника
+        baseSeed = 2; 
     }
 
     @Override
