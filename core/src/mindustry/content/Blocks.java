@@ -22,6 +22,7 @@ import mindustry.world.blocks.campaign.*;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.diplomacy.TowerBlock;
+import mindustry.world.blocks.diplomacy.TradeConduit;
 import mindustry.world.blocks.diplomacy.TradeConveyor;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
@@ -195,7 +196,7 @@ public class Blocks{
     //diplomacy
     dipTowerTear1, dipTowerTear2,
     dipTowerTear3, dipTowerTear4, dipTowerTear5,
-    tradeConveyor
+    tradeConveyor, tradeConduit
     ;
 
     public static void load(){
@@ -7074,6 +7075,13 @@ public class Blocks{
             buildVisibility = BuildVisibility.diplomacyOnly;
             health = 60;
             speed = 0.04f;
+            itemCapacity = 5;
+        }};
+
+        tradeConduit = new TradeConduit("trade-conduit"){{
+            requirements(Category.liquid, with(Items.graphite, 7, Items.titanium, 5, Items.metaglass, 3));
+            buildVisibility = BuildVisibility.diplomacyOnly;
+            health = 60;
             itemCapacity = 5;
         }};
 

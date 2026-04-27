@@ -29,6 +29,7 @@ import mindustry.mod.*;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.blocks.*;
+import mindustry.world.blocks.diplomacy.TradeConduit;
 import mindustry.world.blocks.diplomacy.TradeConveyor;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.power.*;
@@ -609,7 +610,7 @@ public class Block extends UnlockableContent implements Senseable{
                     }
                 }
             }
-            if(!inOwnZone && !inAnyZone && !(this instanceof TradeConveyor)) return false;
+            if(!inOwnZone && !inAnyZone && !(this instanceof TradeConveyor) && !(this instanceof TradeConduit)) return false;
         }
 
 
