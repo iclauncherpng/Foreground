@@ -23,6 +23,7 @@ public class TerritorySystem {
     public static byte[][] territoryMap;
 
     public static void load() {
+        Core.settings.defaults("territoryopacity", 15);
         Events.on(WorldLoadEvent.class, event -> {
             territoryMap = new byte[world.width()][world.height()];
             if(state.rules.diplomacy){
