@@ -145,7 +145,7 @@ public class CustomRulesDialog extends BaseDialog{
         main.left().defaults().fillX().left();
         main.row();
 
-        category("Cheats");
+        category("cheats");
         check("@rules.allowEditRules", b -> rules.allowEditRules = b, () -> rules.allowEditRules);
         check("@rules.instantBuild", b -> rules.instantBuild = b, () -> rules.instantBuild);
         category("waves");
@@ -335,6 +335,7 @@ public class CustomRulesDialog extends BaseDialog{
                 number("@rules.unitbuildspeedmultiplier", f -> teams.unitBuildSpeedMultiplier = f, () -> teams.unitBuildSpeedMultiplier, 0.001f, 50f);
                 number("@rules.unitcostmultiplier", f -> teams.unitCostMultiplier = f, () -> teams.unitCostMultiplier);
                 number("@rules.unithealthmultiplier", f -> teams.unitHealthMultiplier = f, () -> teams.unitHealthMultiplier);
+                check("@rules.cheat", b -> teams.cheat = b, () -> teams.cheat);
 
                 if(!current.hasChildren()){
                     teamRules.clear();
