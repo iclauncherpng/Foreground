@@ -692,29 +692,25 @@ public class PlacementFragment{
                             if(lastCanModify[0] != state.rules.canModifyWorld || lastExperiments[0] != state.rules.experiments){
                                 lastCanModify[0] = state.rules.canModifyWorld;
                                 lastExperiments[0] = state.rules.experiments;
-
-                                for(Block b : content.blocks()){
-                                    if(b.category == Category.terrain || b.category == Category.stone){
-                                        b.buildVisibility = state.rules.canModifyWorld ?
-                                                BuildVisibility.shown :
-                                                BuildVisibility.editorOnly;
-
-                                        if(b instanceof mindustry.world.blocks.environment.StaticWall){
-                                            b.destructible = state.rules.canModifyWorld;
+                                ui.loadfrag.show("@applying.rules");
+                                Time.runTask(1f, () -> {
+                                    for(Block b : content.blocks()){
+                                        if(b.category == Category.terrain || b.category == Category.stone){
+                                            b.buildVisibility = state.rules.canModifyWorld ? BuildVisibility.shown : BuildVisibility.editorOnly;
+                                            if(b instanceof mindustry.world.blocks.environment.StaticWall) b.destructible = state.rules.canModifyWorld;
                                         }
                                     }
-                                }
-
-                                if(renderer != null && renderer.blocks != null){
-                                    renderer.blocks.updateDarkness();
-                                    for(Tile tile : world.tiles){
-                                        if(tile.block() instanceof mindustry.world.blocks.environment.StaticWall){
-                                            renderer.blocks.recacheWall(tile);
+                                    if(renderer != null && renderer.blocks != null){
+                                        renderer.blocks.updateDarkness();
+                                        for(Tile tile : world.tiles){
+                                            if(tile.block() instanceof mindustry.world.blocks.environment.StaticWall){
+                                                renderer.blocks.recacheWall(tile);
+                                            }
                                         }
                                     }
-                                }
-
-                                rebuild();
+                                    rebuild();
+                                    ui.loadfrag.hide();
+                                });
                             }
                         });
 
