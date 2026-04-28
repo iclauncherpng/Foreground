@@ -106,7 +106,7 @@ public class MenuFragment{
         }
 
         //String versionText = ((Version.build == -1) ? "[#fc8140aa]" : "[#ffffffba]") + Version.combined() + "\n[#70baffba]Tantros Preview";
-        String versionText = "[#f54260ba]Overhaul Update\n" + ((Version.build.equals("-1")) ? "[#fc8140aa]" : "[#ffffffba]") + Version.combined();
+        String versionText = /*"[#f54260ba]Overhaul Update\n" +*/ ((Version.build.equals("-1")) ? "[#fc8140aa]" : "[#ffffffba]") + Version.combined();
         parent.fill((x, y, w, h) -> {
             TextureRegion logo = Core.atlas.find("logo");
             float width = Core.graphics.getWidth(), height = Core.graphics.getHeight() - Core.scene.marginTop;
