@@ -5,7 +5,7 @@ import arc.Files.*;
 import arc.backend.sdl.*;
 import arc.backend.sdl.jni.*;
 import arc.discord.*;
-import arc.discord.DiscordRPC.*;
+//import arc.discord.DiscordRPC.*;
 import arc.filedialogs.*;
 import arc.files.*;
 import arc.func.*;
@@ -148,21 +148,21 @@ public class DesktopLauncher extends ClientLauncher{
     public DesktopLauncher(String[] args){
         this.args = args;
 
-        if(useDiscord){
-            Threads.daemon(() -> {
-                try{
-                    DiscordRPC.connect(discordID);
-                    Log.info("Initialized Discord rich presence.");
-                    Runtime.getRuntime().addShutdownHook(new Thread(DiscordRPC::close));
-                }catch(NoDiscordClientException none){
-                    //don't log if no client is found
-                    useDiscord = false;
-                }catch(Throwable t){
-                    useDiscord = false;
-                    Log.warn("Failed to initialize Discord RPC - you are likely using a JVM <16.");
-                }
-            });
-        }
+//        if(useDiscord){
+//            Threads.daemon(() -> {
+//                try{
+//                    DiscordRPC.connect(discordID);
+//                    Log.info("Initialized Discord rich presence.");
+//                    Runtime.getRuntime().addShutdownHook(new Thread(DiscordRPC::close));
+//                }catch(NoDiscordClientException none){
+//                    //don't log if no client is found
+//                    useDiscord = false;
+//                }catch(Throwable t){
+//                    useDiscord = false;
+//                    Log.warn("Failed to initialize Discord RPC - you are likely using a JVM <16.");
+//                }
+//            });
+//        }
 
         if(Version.isSteam){
             Events.on(ClientLoadEvent.class, event -> {
@@ -532,25 +532,25 @@ public class DesktopLauncher extends ClientLauncher{
             }
         }
 
-        if(useDiscord){
-            RichPresence presence = new RichPresence();
-
-            if(inGame){
-                presence.state = gameMode + gamePlayersSuffix;
-                presence.details = gameMapWithWave;
-                if(state.rules.waves){
-                    presence.largeImageText = "Wave " + state.wave;
-                }
-            }else{
-                presence.state = uiState;
-            }
-
-            presence.largeImageKey = "logo";
-
-            try{
-                DiscordRPC.send(presence);
-            }catch(Exception ignored){}
-        }
+//        if(useDiscord){
+//            RichPresence presence = new RichPresence();
+//
+//            if(inGame){
+//                presence.state = gameMode + gamePlayersSuffix;
+//                presence.details = gameMapWithWave;
+//                if(state.rules.waves){
+//                    presence.largeImageText = "Wave " + state.wave;
+//                }
+//            }else{
+//                presence.state = uiState;
+//            }
+//
+//            presence.largeImageKey = "logo";
+//
+//            try{
+//                DiscordRPC.send(presence);
+//            }catch(Exception ignored){}
+//        }
 
         if(steam){
             //Steam mostly just expects us to give it a nice string, but it apparently expects "steam_display" to always be a loc token, so I've uploaded this one which just passes through 'steam_status' raw.
