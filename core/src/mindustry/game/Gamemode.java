@@ -42,7 +42,7 @@ public enum Gamemode{
         rules.enemyCoreBuildRadius = 0f;
         rules.coreCapture = true;
     }, map -> map.teams.size > 1),
-    editor(false, rules -> {
+    editor(true, rules -> {
         rules.canModifyWorld = true;
         rules.infiniteResources = true;
         rules.instantBuild = true;

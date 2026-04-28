@@ -56,15 +56,22 @@ public class MapPlayDialog extends BaseDialog{
         selmode.row();
 
         selmode.table(Tex.button, modes -> {
-            int i = 0;
+            int visibleCount = 0;
+            for(Gamemode mode : Gamemode.all) if(!mode.hidden) visibleCount++;
+            int current = 0;
             for(Gamemode mode : Gamemode.all){
                 if(mode.hidden) continue;
-
-                modes.button(mode.toString(), Styles.flatToggleMenut, () -> {
+                current++;
+                var cell = modes.button(mode.toString(), Styles.flatToggleMenut, () -> {
                     selectedGamemode = mode;
                     rules = map.applyRules(mode);
                 }).update(b -> b.setChecked(selectedGamemode == mode)).size(140f, mobile ? 44f : 54f).disabled(!mode.valid(map));
-                if(i++ % 2 == 1) modes.row();
+                if(current == visibleCount && current % 2 != 0){
+                    cell.colspan(2).center();
+                    modes.row();
+                } else if(current % 2 == 0){
+                    modes.row();
+                }
             }
         });
 
