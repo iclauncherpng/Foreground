@@ -29,6 +29,7 @@ import mindustry.mod.*;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.blocks.*;
+import mindustry.world.blocks.diplomacy.TowerBlock;
 import mindustry.world.blocks.diplomacy.TradeConduit;
 import mindustry.world.blocks.diplomacy.TradeConveyor;
 import mindustry.world.blocks.environment.*;
@@ -592,28 +593,28 @@ public class Block extends UnlockableContent implements Senseable{
 
 
     public final boolean checkPlacementFull(Tile tile, Team team, int rotation){
-        if(!devMode && state.rules.diplomacy){
-            boolean inAnyZone = false;
-            boolean inOwnZone = false;
-            for(Building b : Groups.build){
-                if(TerritorySystem.territoryBlocks.containsKey(b.block)){
-                    float radius = TerritorySystem.territoryBlocks.get(b.block, 0f);
-                    float bx = b.x, by = b.y;
-                    if(b.block.size % 2 == 0){ bx -= 4f; by -= 4f; }
-
-                    float side = radius * 0.7071f; // Mathf.cosDeg(45f)
-
-                    if(Math.abs(tile.worldx() - bx) <= side && Math.abs(tile.worldy() - by) <= side){
-                        inAnyZone = true;
-                        if(b.team == team) inOwnZone = true;
-                        else return false;
+        if(tile == null || Groups.build == null || world.tile(tile.x, tile.y) == null) return true;
+        if(!state.rules.diplomacy || devMode) return true;
+        boolean inAnyZone = false;
+        boolean inOwnZone = false;
+        float margin = (this instanceof TowerBlock) ? 74f : 0f;
+        for(Building b : Groups.build){
+            if(TerritorySystem.territoryBlocks.containsKey(b.block)){
+                float radius = TerritorySystem.territoryBlocks.get(b.block, 0f);
+                float side = (radius * 0.7071f) + margin;
+                float bx = b.x, by = b.y;
+                if(b.block.size % 2 == 0){ bx -= 4f; by -= 4f; }
+                if(Math.abs(tile.worldx() - bx) <= side && Math.abs(tile.worldy() - by) <= side){
+                    inAnyZone = true;
+                    if(b.team == team){
+                        inOwnZone = true;
+                    }else{
+                        return false;
                     }
                 }
             }
-            if(!inOwnZone && !inAnyZone && !(this instanceof TradeConveyor) && !(this instanceof TradeConduit)) return false;
         }
-
-
+        if(!inOwnZone && !inAnyZone && !(this instanceof TradeConveyor) && !(this instanceof TradeConduit)) return false;
         return canPlaceOn(tile, team, rotation);
     }
 

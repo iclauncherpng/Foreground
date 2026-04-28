@@ -20,9 +20,11 @@ public class TerritorySystem {
     public static boolean initialized = false;
     private static Bits drawn = new Bits();
     public static TerritoryRenderer renderer = new TerritoryRenderer();
+    public static byte[][] territoryMap;
 
     public static void load() {
         Events.on(WorldLoadEvent.class, event -> {
+            territoryMap = new byte[world.width()][world.height()];
             if(state.rules.diplomacy){
                 state.rules.polygonCoreProtection = false;
                 state.rules.enemyCoreBuildRadius = 0f;
@@ -39,7 +41,7 @@ public class TerritorySystem {
             territoryBlocks.put(Blocks.coreCitadel, 640f);
             territoryBlocks.put(Blocks.coreBastion, 640f);
             territoryBlocks.put(Blocks.coreAcropolis, 640f);
-            territoryBlocks.put(Blocks.dipTowerTear1, 90f);
+            territoryBlocks.put(Blocks.dipTowerTear1, 96f);
             territoryBlocks.put(Blocks.dipTowerTear2, 140f);
             territoryBlocks.put(Blocks.dipTowerTear3, 240f);
             initialized = true;

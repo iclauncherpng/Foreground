@@ -18,6 +18,8 @@ import mindustry.maps.*;
 import mindustry.type.*;
 import mindustry.type.Weather.*;
 import mindustry.world.*;
+import mindustry.world.blocks.diplomacy.TradeConduit;
+import mindustry.world.blocks.diplomacy.TradeConveyor;
 import mindustry.world.blocks.storage.*;
 import mindustry.world.blocks.storage.CoreBlock.*;
 
@@ -34,7 +36,7 @@ import static mindustry.Vars.*;
  * This class should <i>not</i> call any outside methods to change state of modules, but instead fire events.
  */
 public class Logic implements ApplicationListener{
-
+    private int lastBuildingIndex = 0;
     public Logic(){
 
         Events.on(BlockDestroyEvent.class, event -> {
@@ -503,15 +505,20 @@ public class Logic implements ApplicationListener{
                 state.envAttrs.clear();
                 state.envAttrs.add(state.rules.attributes);
                 Groups.weather.each(w -> state.envAttrs.add(w.weather.attrs, w.opacity));
-
-                if(state.isGame() && !state.isPaused() && state.rules.diplomacy && !net.client()){
-                    Groups.build.each(build -> {
-                        boolean inZone = build.block.checkPlacementFull(build.tile, build.team, build.rotation);
-                        build.enabled = inZone;
-                    });
-                }
-
                 PerfCounter.entityUpdate.begin();
+                if(state.rules.diplomacy && Groups.build.size() > 0){
+                    for(int i = 0; i < 5; i++){
+                        lastBuildingIndex++;
+                        if(lastBuildingIndex >= Groups.build.size()){
+                            lastBuildingIndex = 0;
+                            break;
+                        }
+                        Building b = Groups.build.index(lastBuildingIndex);
+                        if(b != null && !(b.block instanceof TradeConveyor) && !(b.block instanceof TradeConduit)){
+                            b.enabled = b.block.checkPlacementFull(b.tile, b.team, b.rotation);
+                        }
+                    }
+                }
                 Groups.update();
                 PerfCounter.entityUpdate.end();
 
