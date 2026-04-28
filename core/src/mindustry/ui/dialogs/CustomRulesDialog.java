@@ -145,6 +145,9 @@ public class CustomRulesDialog extends BaseDialog{
         main.left().defaults().fillX().left();
         main.row();
 
+        category("Cheats");
+        check("@rules.allowEditRules", b -> rules.allowEditRules = b, () -> rules.allowEditRules);
+        check("@rules.instantBuild", b -> rules.instantBuild = b, () -> rules.instantBuild);
         category("waves");
         check("@rules.waves", b -> rules.waves = b, () -> rules.waves);
         check("@rules.wavesending", b -> rules.waveSending = b, () -> rules.waveSending, () -> rules.waves);
