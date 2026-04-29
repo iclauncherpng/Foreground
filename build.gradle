@@ -385,6 +385,8 @@ project(":server"){
     dependencies{
         implementation project(":core")
         implementation arcModule("backends:backend-headless")
+        implementation "org.jline:jline-reader:3.21.0"
+        implementation "org.jline:jline-terminal:3.21.0"
         annotationProcessor 'com.github.Anuken:jabel:0.9.0'
     }
 }
