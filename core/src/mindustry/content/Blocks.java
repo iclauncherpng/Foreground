@@ -7047,7 +7047,7 @@ public class Blocks{
         dipTowerTear1 = new TowerBlock("diplomacy-tower-t1"){{
             //tier = 1;
             requirements(Category.effect, with(Items.copper, 450, Items.silicon, 250, Items.titanium, 350));
-            buildVisibility = BuildVisibility.diplomacyOnly;
+            buildVisibility = BuildVisibility.hidden;
             size = 1;
             health = 500;
         }};
@@ -7063,7 +7063,7 @@ public class Blocks{
         dipTowerTear3 = new TowerBlock("diplomacy-tower-t3"){{
             tier = 3;
             requirements(Category.effect, with(Items.copper, 1450, Items.silicon, 1700, Items.titanium, 1350, Items.phaseFabric, 550));
-            buildVisibility = BuildVisibility.diplomacyOnly;
+            buildVisibility = BuildVisibility.hidden;
             size = 3;
             health = 2800;
             hasPower = true;
