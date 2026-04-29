@@ -597,7 +597,7 @@ public class Block extends UnlockableContent implements Senseable{
         if(!state.rules.diplomacy || devMode) return true;
         boolean inAnyZone = false;
         boolean inOwnZone = false;
-        float margin = (this instanceof TowerBlock) ? 74f : 0f;
+        float margin = (this instanceof TowerBlock) ? 96f : 0f;
         for(Building b : Groups.build){
             if(TerritorySystem.territoryBlocks.containsKey(b.block)){
                 float radius = TerritorySystem.territoryBlocks.get(b.block, 0f);
