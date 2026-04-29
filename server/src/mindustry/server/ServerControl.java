@@ -34,6 +34,10 @@ import java.time.format.*;
 import java.util.*;
 import java.util.regex.*;
 
+import org.jline.reader.*;
+import org.jline.terminal.*;
+import org.jline.reader.impl.history.DefaultHistory;
+
 import static arc.util.ColorCodes.*;
 import static arc.util.Log.*;
 import static mindustry.Vars.*;
@@ -52,10 +56,46 @@ public class ServerControl implements ApplicationListener{
     private final Interval autosaveCount = new Interval();
 
     public Runnable serverInput = () -> {
-        Scanner scan = new Scanner(System.in);
-        while(scan.hasNext()){
-            String line = scan.nextLine();
-            Core.app.post(() -> handleCommandString(line));
+        try {
+            Terminal terminal = TerminalBuilder.builder()
+                    .system(true)
+                    .dumb(true) 
+                    .build();
+
+            DefaultHistory history = new DefaultHistory();
+            LineReader reader = LineReaderBuilder.builder()
+                    .terminal(terminal)
+                    .history(history)
+                    .variable(LineReader.HISTORY_FILE, logFolder.child("cmd_history.txt").file())
+                    .build();
+
+            try {
+                history.load();
+            } catch (IOException e) {
+                warn("Could not load command history.");
+            }
+            while (!Thread.currentThread().isInterrupted()) {
+                String line = null;
+                try {
+                    line = reader.readLine("> ");
+                } catch (UserInterruptException e) {
+                    Core.app.exit();
+                    return;
+                } catch (EndOfFileException e) {
+                    return;
+                }
+                if (line != null && !line.trim().isEmpty()) {
+                    final String currentLine = line;
+                    Core.app.post(() -> handleCommandString(currentLine));
+                }
+            }
+        } catch (Exception e) {
+            err("JLine initialization failed, falling back to Scanner: @", e.getMessage());
+            Scanner scan = new Scanner(System.in);
+            while(scan.hasNext()){
+                String line = scan.nextLine();
+                Core.app.post(() -> handleCommandString(line));
+            }
         }
     };
 
