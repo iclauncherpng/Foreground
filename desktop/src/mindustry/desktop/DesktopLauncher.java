@@ -52,6 +52,7 @@ public class DesktopLauncher extends ClientLauncher{
             new SdlApplication(new DesktopLauncher(arg), new SdlConfig(){{
                 title = "Foreground";
                 maximized = true;
+                stencil = 8;
                 coreProfile = true;
                 width = 900;
                 height = 700;
