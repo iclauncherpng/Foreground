@@ -96,11 +96,13 @@ public class TowerBlock extends Wall {
             return next != null && team.core() != null && team.core().items.has(next.requirements);
         }
 
-        public void upgrade(){
+        public void upgrade() {
             Block next = getNextTierBlock();
             if(next == null || !canUpgrade()) return;
             team.core().items.remove(next.requirements);
-            Fx.placeBlock.at(x, y);
+            Fx.arcShieldBreak.at(x, y);
+            Fx.upgradeCore.at(x, y);
+            Fx.smeltsmoke.at(x, y);
             tile.setBlock(next, team);
         }
 
