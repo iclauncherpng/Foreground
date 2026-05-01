@@ -190,8 +190,16 @@ public class CoreBlock extends StorageBlock{
     }
 
     @Override
-    public boolean canBreak(Tile tile){
-        return state.rules.canBuildCores || state.isEditor();
+    public boolean canBreak(Tile tile) {
+        if (state.isEditor()) return true;
+        if (state.rules.protectLastCore) {
+            if (tile.build instanceof CoreBuild core) {
+                if (core.team.cores().size <= 1) {
+                    return false;
+                }
+            }
+        }
+        return state.rules.canBuildCores;
     }
 
     @Override

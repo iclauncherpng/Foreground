@@ -179,6 +179,7 @@ public class CustomRulesDialog extends BaseDialog{
         number("@rules.blockdamagemultiplier", f -> rules.blockDamageMultiplier = f, () -> rules.blockDamageMultiplier);
         check("@rules.canbuildcores", b -> rules.canBuildCores = b, () -> rules.canBuildCores);
         slideri("@rules.maxcores", f -> rules.maxCores = f, () -> rules.maxCores, 0, 100, 1, i -> i == 0 ? "∞" : i + "", () -> rules.canBuildCores);
+        check("@rules.protectlastcore", b -> rules.protectLastCore = b, () -> rules.protectLastCore);
 
         if(Core.bundle.get("configure").toLowerCase().contains(ruleSearch)){
             current.button("@configure",

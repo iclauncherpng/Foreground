@@ -211,6 +211,7 @@ public class Rules{
     /** If enabled, allows breaking and building cores */
     public boolean canBuildCores = false;
     public int maxCores = 0;
+    public boolean protectLastCore = true;
     /** Map area limit rectangle. */
     public int limitX, limitY, limitWidth = 1, limitHeight = 1;
     /** If true, blocks outside the map area are disabled. */
