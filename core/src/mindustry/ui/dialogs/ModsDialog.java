@@ -224,7 +224,11 @@ public class ModsDialog extends BaseDialog{
 
             }).margin(margin);
 
-            buttons.button("@mods.browser", Icon.menu, style, this::showModBrowser).margin(margin);
+            buttons.button("@mods.browser", Icon.menu, style, this::showModBrowser)
+                    .margin(margin)
+                    .disabled(true)
+                    .get()
+                    .addListener(new Tooltip(t -> t.background(Styles.black8).margin(4f).add("@dsmb")));
         }).width(w);
 
         cont.row();
