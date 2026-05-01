@@ -177,7 +177,7 @@ task copyAndroidNatives(){
 }
 
 task run(type: Exec){
-    commandLine "${findSdkDir()}/platform-tools/adb", 'shell', 'am', 'start', '-n', 'io.anuke.mindustry/mindustry.android.AndroidLauncher'
+    commandLine "${findSdkDir()}/platform-tools/adb", 'shell', 'am', 'start', '-n', 'io.foreground.mindustry/mindustry.android.AndroidLauncher'
 }
 
 if(!project.ext.hasSprites()){

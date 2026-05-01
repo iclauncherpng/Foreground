@@ -40,7 +40,7 @@ allprojects{
     ext{
         if(!project.hasProperty("versionModifier")) versionModifier = 'beta'
         if(!project.hasProperty("versionType")) versionType = 'official'
-        appName = 'Mindustry'
+        appName = 'Foreground'
         steamworksVersion = '0b86023401880bb5e586bc404bedbaae9b1f1c94'
         rhinoVersion = '54b75cbd1207ef1fd5cff517cbd188e763c85baa'
 
