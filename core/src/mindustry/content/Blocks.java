@@ -206,7 +206,11 @@ public class Blocks{
 
         spawn = new SpawnBlock("spawn");
 
-        removeWall = new RemoveWall("remove-wall");
+        //removeWall = new RemoveWall("remove-wall");
+        removeWall = new RemoveWall("remove-wall"){{
+            requirements(Category.stone, with(Items.graphite, 0));
+            buildVisibility = BuildVisibility.shown;
+        }};
 
         removeOre = new RemoveOre("remove-ore");
 
