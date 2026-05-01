@@ -164,7 +164,7 @@ public class CoreBlock extends StorageBlock{
         addBar("core-limit", (CoreBuild e) -> {
             Bar bar = new Bar(
                     () -> Core.bundle.format("bar.core-limit", e.team.data().cores.size, state.rules.maxCores),
-                    () -> Color.valueOf("8142f5"),
+                    () -> Color.valueOf("e08122"),
                     () -> state.rules.maxCores <= 0 ? 0f : (float)e.team.data().cores.size / state.rules.maxCores
             );
             return (state.rules.canBuildCores && state.rules.maxCores > 0) ? bar : null;
