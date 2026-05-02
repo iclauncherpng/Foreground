@@ -205,9 +205,9 @@ public class StatusEffects{
             intervalDamage = 0f;
             intervalDamageTime = 0f;
             speedMultiplier = 0.4f;
-            dragMultiplier = 0.6f;
+            dragMultiplier = 0.4f;
             effectChance = 0.15f;
-            effect = Fx.corrosionVapor;
+            effect = Fx.dustCloud;
         }};
 
         disarmed = new StatusEffect("disarmed"){{
