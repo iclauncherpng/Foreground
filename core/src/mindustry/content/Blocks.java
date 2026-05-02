@@ -3234,7 +3234,7 @@ public class Blocks{
             itemCapacity = 4000;
             size = 3;
             buildCostMultiplier = 2f;
-
+            spawnTime = 256f;
             unitCapModifier = 8;
         }};
 
@@ -3246,7 +3246,7 @@ public class Blocks{
             itemCapacity = 9000;
             size = 4;
             thrusterLength = 34/4f;
-
+            spawnTime = 176f;
             unitCapModifier = 16;
             researchCostMultiplier = 0.07f;
         }};
@@ -3275,6 +3275,7 @@ public class Blocks{
             size = 4;
             thrusterLength = 34/4f;
             armor = 5f;
+            spawnTime = 126f;
             alwaysUnlocked = true;
             incinerateNonBuildable = true;
             requiresCoreZone = true;
@@ -3295,6 +3296,7 @@ public class Blocks{
             size = 5;
             thrusterLength = 40/4f;
             armor = 10f;
+            spawnTime = 88f;
             incinerateNonBuildable = true;
             buildCostMultiplier = 0.7f;
             requiresCoreZone = true;
@@ -3316,7 +3318,7 @@ public class Blocks{
             incinerateNonBuildable = true;
             buildCostMultiplier = 0.7f;
             requiresCoreZone = true;
-
+            spawnTime = 55f;
             unitCapModifier = 15;
             researchCostMultipliers.put(Items.silicon, 0.4f);
             researchCostMultiplier = 0.1f;
