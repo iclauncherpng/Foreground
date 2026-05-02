@@ -1721,6 +1721,8 @@ public class UnitType extends UnlockableContent implements Senseable{
     }
 
     public void drawEngines(Unit unit){
+        drawTrail(unit);
+
         if((useEngineElevation ? unit.elevation : 1f) <= 0.0001f) return;
 
         for(var engine : engines){

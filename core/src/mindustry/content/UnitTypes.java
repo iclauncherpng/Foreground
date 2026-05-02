@@ -69,7 +69,7 @@ public class UnitTypes{
     public static @EntityDef(value = {Unitc.class, Payloadc.class}, legacy = true) UnitType oct;
 
     //air, legacy
-    public static @EntityDef(value = {Unitc.class}, legacy = true) UnitType alpha, beta, gamma, daggerTypeA;
+    public static @EntityDef(value = {Unitc.class}, legacy = true) UnitType alpha, beta, gamma, daggerTypeA, shrine;
 
     //naval
     public static @EntityDef({Unitc.class, WaterMovec.class}) UnitType risso, minke, bryde, sei, omura, retusa, oxynoe, cyerce, aegires, navanax;
@@ -2537,7 +2537,6 @@ public class UnitTypes{
             alwaysUnlocked = true;
             wreckSoundVolume = 0.8f;
             deathSoundVolume = 0.7f;
-
             weapons.add(new Weapon("small-basic-weapon"){{
                 reload = 17f;
                 x = 2.75f;
@@ -4688,6 +4687,48 @@ public class UnitTypes{
                     width = 7f;
                     height = 9f;
                     lifetime = 60f;
+                }};
+            }});
+        }};
+
+
+        shrine = new UnitType("shrine"){{
+            controller = u -> u.team.isAI() ? new BuilderAI(true, 400f) : new CommandAI();
+            isEnemy = false;
+
+            targetBuildingsMobile = false;
+            lowAltitude = true;
+            flying = true;
+            mineSpeed = 6.5f;
+            mineTier = 1;
+            buildSpeed = 0.5f;
+            drag = 0.05f;
+            speed = 15f;
+            rotateSpeed = 15f;
+            accel = 0.1f;
+            fogRadius = 0f;
+            itemCapacity = 300;
+            health = 150000f;
+            engineOffset = 6f;
+            hitSize = 8f;
+            alwaysUnlocked = true;
+            wreckSoundVolume = 0.8f;
+            deathSoundVolume = 0.7f;
+            //abilities.add(new ProjectionSorceryAbility(60f, 220f, 180f));
+            abilities.add(new SukunaCutAbility(450f, 15f, 2020f));
+            weapons.add(new Weapon("large-weapon"){{
+                reload = 212342341f;
+                x = 4f;
+                y = 2f;
+                top = false;
+
+                mirror = true;
+
+                ejectEffect = Fx.reactorExplosion;
+                bullet = new BasicBulletType(1.8f, 6){{
+                    width = 0.1f;
+                    height = 0.1f;
+                    lifetime = 0f;
                 }};
             }});
         }};
