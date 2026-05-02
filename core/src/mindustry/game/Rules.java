@@ -238,6 +238,7 @@ public class Rules{
     public boolean canModifyWorld = false;
 
     public boolean experiments = false;
+    public boolean newSpawnSystem = false;
 
     /** Copies this ruleset exactly. Not efficient at all, do not use often. */
     public Rules copy(){

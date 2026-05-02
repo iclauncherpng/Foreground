@@ -350,6 +350,7 @@ public class CustomRulesDialog extends BaseDialog{
 
         category("other");
         check("@rules.experiments", b -> rules.experiments = b, () -> rules.experiments);
+        check("@rules.newSpawnSystem", b -> rules.newSpawnSystem = b, () -> rules.newSpawnSystem);
 
         additionalSetup.each(Runnable::run);
 
