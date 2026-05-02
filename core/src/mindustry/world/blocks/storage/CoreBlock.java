@@ -95,6 +95,11 @@ public class CoreBlock extends StorageBlock{
     @Remote(called = Loc.server)
     public static void playerSpawn(Tile tile, Player player){
         if(player == null || tile == null || !(tile.build instanceof CoreBuild core)) return;
+        for(CoreBuild otherCore : player.team().cores()){
+            if(otherCore.spawningPlayer == player){
+                if(otherCore != core) return;
+            }
+        }
         if(state.rules.newSpawnSystem){
             if(core.spawningPlayer == player && core.spawningUnit != null) return;
         }
@@ -654,6 +659,13 @@ public class CoreBlock extends StorageBlock{
         public void updateTile(){
             super.updateTile();
             if(spawningPlayer == null) return;
+            if(Vars.player == spawningPlayer){
+                arc.Core.camera.position.set(x, y);
+            }
+            if(spawningPlayer.unit() != null || (spawningPlayer.shooting && spawningPlayer.unit() != spawningUnit)) {
+                cancelSpawning();
+                return;
+            }
             if(spawningUnit != null && spawningPlayer != null){
                 if(spawningPlayer.unit() != null && spawningPlayer.unit() != spawningUnit){
                     spawningUnit = null;
@@ -681,6 +693,12 @@ public class CoreBlock extends StorageBlock{
                     }
                 }
             }
+        }
+
+        private void cancelSpawning() {
+            spawningUnit = null;
+            spawningPlayer = null;
+            spawnProgress = 0f;
         }
 
         /** @return Camera zoom while landing or launching. May optionally do other things such as setting camera position to itself. */
