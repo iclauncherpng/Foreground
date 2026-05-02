@@ -3259,7 +3259,7 @@ public class Blocks{
             itemCapacity = 13000;
             size = 5;
             thrusterLength = 40/4f;
-
+            spawnTime = 126f;
             unitCapModifier = 24;
             researchCostMultiplier = 0.11f;
         }};

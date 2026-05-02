@@ -68,6 +68,8 @@ public class CoreBlock extends StorageBlock{
 
     public float captureInvicibility = 60f * 15f;
 
+    public float spawnTime = 60f;
+
     public CoreBlock(String name){
         super(name);
 
@@ -93,39 +95,46 @@ public class CoreBlock extends StorageBlock{
     @Remote(called = Loc.server)
     public static void playerSpawn(Tile tile, Player player){
         if(player == null || tile == null || !(tile.build instanceof CoreBuild core)) return;
-
+        if(state.rules.newSpawnSystem){
+            if(core.spawningPlayer == player && core.spawningUnit != null) return;
+        }
         CoreBlock block = (CoreBlock)core.block;
         UnitType spawnType = block.unitType;
-
-        if(core.wasVisible){
-            Fx.spawn.at(core);
+        if(core.wasVisible) Fx.spawn.at(core);
+        if(state.rules.newSpawnSystem){
+            player.set(core.x, core.y);
+            if(player == Vars.player){
+                arc.Core.camera.position.set(core.x, core.y);
+            }
+        } else {
+            player.set(core);
         }
-
-        player.set(core);
-
         if(!net.client()){
             Unit unit = spawnType.create(tile.team());
-
-            for(var mount : unit.mounts){
-                mount.reload = mount.weapon.reload;
-            }
-
-            if(block.landSpawn){
-                float offset = (block.size * Vars.tilesize / 2f) + 12f;
-                unit.set(core.x, core.y - offset);
+            for(var mount : unit.mounts) mount.reload = mount.weapon.reload;
+            if(state.rules.newSpawnSystem){
+                unit.set(core.x, core.y);
                 unit.rotation(90f);
-                unit.impulse(0f, -2f);
+                core.spawningUnit = unit;
+                core.spawningPlayer = player;
+                core.spawnProgress = 0f;
+                
             } else {
-                unit.set(core);
-                unit.rotation(90f);
-                unit.impulse(0f, 3f);
+                if(block.landSpawn){
+                    float offset = (block.size * Vars.tilesize / 2f) + 12f;
+                    unit.set(core.x, core.y - offset);
+                    unit.rotation(90f);
+                    unit.impulse(0f, -2f);
+                } else {
+                    unit.set(core);
+                    unit.rotation(90f);
+                    unit.impulse(0f, 3f);
+                }
+                unit.controller(player);
+                unit.add();
             }
-
             unit.spawnedByCore(true);
-            unit.controller(player);
-            unit.add();
         }
-
         if(state.isCampaign() && player == Vars.player){
             spawnType.unlock();
         }
@@ -307,6 +316,10 @@ public class CoreBlock extends StorageBlock{
 
         protected float cloudSeed, landParticleTimer;
 
+        public float spawnProgress = 0f;
+        public @Nullable Unit spawningUnit = null;
+        public @Nullable Player spawningPlayer = null;
+
         @Override
         public boolean isCommandable(){
             return team != state.rules.defaultTeam && state.rules.editor;
@@ -329,20 +342,24 @@ public class CoreBlock extends StorageBlock{
 
         @Override
         public void draw(){
-            //draw thrusters when just landed
-            if(thrusterTime > 0){
-                float frame = thrusterTime;
-
-                Draw.alpha(1f);
-                drawThrusters(frame);
-                Draw.rect(block.region, x, y);
-                Draw.alpha(Interp.pow4In.apply(frame));
-                drawThrusters(frame);
-                Draw.reset();
-
-                drawTeamTop();
-            }else{
-                super.draw();
+            super.draw();
+            if(spawningUnit != null && spawningUnit.type != null && spawningPlayer != null){
+                // if(spawningPlayer != Vars.player) return;
+                TextureRegion unitRegion = spawningUnit.type.fullIcon;
+                Draw.draw(Layer.blockOver + 0.1f, () -> {
+                    Shaders.build.region = unitRegion;
+                    Shaders.build.progress = spawnProgress;
+                    Shaders.build.color.set(Pal.accent);
+                    Shaders.build.time = Time.time / 20f;
+                    Draw.shader(Shaders.build);
+                    Draw.rect(unitRegion, x, y, spawningUnit.rotation - 90);
+                    Draw.shader();
+                    Draw.color(Pal.accent);
+                    float sizePixels = block.size * Vars.tilesize;
+                    float lineY = y - sizePixels/2f + sizePixels * Mathf.absin(Time.time, 10f, 1f);
+                    Lines.line(x - sizePixels/2f, lineY, x + sizePixels/2f, lineY);
+                    Draw.reset();
+                });
             }
         }
 
@@ -635,8 +652,35 @@ public class CoreBlock extends StorageBlock{
 
         @Override
         public void updateTile(){
-            iframes -= Time.delta;
-            thrusterTime -= Time.delta/90f;
+            super.updateTile();
+            if(spawningPlayer == null) return;
+            if(spawningUnit != null && spawningPlayer != null){
+                if(spawningPlayer.unit() != null && spawningPlayer.unit() != spawningUnit){
+                    spawningUnit = null;
+                    spawningPlayer = null;
+                    spawnProgress = 0f;
+                    return;
+                }
+                spawnProgress = Math.min(spawnProgress + Time.delta / ((CoreBlock)block).spawnTime, 1f);
+                if(spawnProgress >= 1f){
+                    if(!net.client()){
+                        if(spawningUnit.type != null){
+                            spawningUnit.set(x, y);
+                            if(!spawningUnit.isAdded()) spawningUnit.add();
+                            spawningPlayer.unit(spawningUnit);
+                        }
+                        spawningUnit = null;
+                        spawningPlayer = null;
+                        spawnProgress = 0f;
+                    } else {
+                        if(spawningPlayer.unit() != null){
+                            spawningUnit = null;
+                            spawningPlayer = null;
+                            spawnProgress = 0f;
+                        }
+                    }
+                }
+            }
         }
 
         /** @return Camera zoom while landing or launching. May optionally do other things such as setting camera position to itself. */
