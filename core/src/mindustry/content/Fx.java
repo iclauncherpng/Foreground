@@ -204,6 +204,43 @@ public class Fx{
         }
     }),
 
+    stormLightning = new Effect(15f, 500f, e -> {
+        if(!(e.data instanceof Vec2)) return;
+        Vec2 target = e.data();
+        Rand rand = new Rand(e.id);
+        float stroke = 3f * e.fout();
+        Draw.color(e.color, Color.white, e.fin());
+        Lines.stroke(stroke);
+        Seq<float[]> stack = new Seq<>();
+        stack.add(new float[]{e.x, e.y, target.x, target.y, 0});
+        while(stack.size > 0){
+            float[] b = stack.pop();
+            float x1 = b[0], y1 = b[1], x2 = b[2], y2 = b[3];
+            int depth = (int)b[4];
+            float dist = Mathf.dst(x1, y1, x2, y2);
+            int segments = Math.max(1, (int)(dist / 8f));
+            float lastX = x1, lastY = y1;
+            for(int i = 1; i <= segments; i++){
+                float progress = (float)i / segments;
+                float off = (i == segments) ? 0 : rand.range(7f);
+                float tx = Mathf.lerp(x1, x2, progress) + off;
+                float ty = Mathf.lerp(y1, y2, progress) + rand.range(7f);
+                Lines.stroke(stroke * (1f - (float)depth * 0.3f));
+                Lines.line(lastX, lastY, tx, ty);
+                if(depth < 2 && rand.chance(0.15)){
+                    float randomOffset = 20f + rand.nextFloat() * 30f;
+                    float ang = Mathf.angle(tx - lastX, ty - lastY) + randomOffset * Mathf.sign(rand.range(1f));
+                    float len = dist * (0.3f + rand.nextFloat() * 0.4f);
+                    stack.add(new float[]{tx, ty, tx + Angles.trnsx(ang, len), ty + Angles.trnsy(ang, len), depth + 1});
+                }
+                lastX = tx;
+                lastY = ty;
+            }
+        }
+
+        Draw.reset();
+    }),
+
     coreBuildShockwave = new Effect(120, 500f, e -> {
         e.lifetime = e.rotation;
 
@@ -1505,6 +1542,29 @@ public class Fx{
         });
     }),
 
+    dustCloud = new Effect(60f, e -> {
+        
+        color(e.color);
+
+        
+        alpha(Interp.pow2Out.apply(e.fslope()) * 0.4f);
+
+        
+        randLenVectors(e.id, 4, 2f + e.finpow() * 10f, (x, y) -> {
+            
+            float size = 1f + e.fout() * 2.5f;
+
+            
+            Fill.poly(e.x + x, e.y + y, 4, size);
+        });
+
+        
+        color(e.color, 0.7f);
+        randLenVectors(e.id + 1, 2, 4f + e.finpow() * 15f, (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, 0.6f);
+        });
+    }),
+
     vapor = new Effect(110f, e -> {
         color(e.color);
         alpha(e.fout());
@@ -1670,6 +1730,45 @@ public class Fx{
 
         randLenVectors(e.id + 1, 8, 1f + 23f * e.finpow(), (x, y) -> {
             lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 3f);
+        });
+    }),
+
+    cleaveEffect = new Effect(30f, e -> {
+        
+        Draw.color(Color.white);
+
+        for(int i = 0; i < 4; i++){
+            float rand = Mathf.randomSeed(e.id + i);
+            float rot = e.rotation + (rand - 0.5f) * 40f;
+            float len = (10f + rand * 40f) * e.foutpow();
+
+            
+            Lines.stroke(3f * e.fout());
+
+            float x = e.x + Angles.trnsx(rot, rand * 10f);
+            float y = e.y + Angles.trnsy(rot, rand * 10f);
+
+            Lines.lineAngle(x, y, rot, len);
+
+            
+            Draw.color(Color.white, Color.clear, 0.5f + (1f - e.fout()) * 0.5f);
+            Lines.lineAngle(x, y, rot, len * 1.2f);
+        }
+
+        
+        Draw.color(Color.black, Color.clear, e.fin());
+        Lines.stroke(1.5f * e.fout());
+        for(int i = 0; i < 2; i++){
+            float rot = e.rotation + Mathf.range(10f);
+            Lines.lineAngle(e.x, e.y, rot, 50f * e.foutpow());
+        }
+
+        
+        Draw.color(Color.white);
+        Angles.randLenVectors(e.id, 6, 4f + 45f * e.finpow(), e.rotation, 30f, (x, y) -> {
+            float ang = Mathf.angle(x, y);
+            Lines.stroke(1f * e.fout());
+            Lines.lineAngle(e.x + x, e.y + y, ang, 2f + 8f * e.fout());
         });
     }),
 
