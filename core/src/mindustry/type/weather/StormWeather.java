@@ -50,10 +50,10 @@ public class StormWeather extends RainWeather {
         float ty = Mathf.random(Vars.world.unitHeight());
         float skyHeight = 200f; 
         for(int i = 0; i < 2; i++){
-            Fx.lightning.at(tx, ty + skyHeight, 270f, Color.white);
+            Fx.stormLightning.at(tx, ty + skyHeight, 270f, Color.white);
         }
         Lightning.create(Team.derelict, Color.white, strikeDamage * state.intensity, tx, ty, 90f, 20);
-        Fx.lightning.at(tx, ty, Color.white);
+        Fx.stormLightning.at(tx, ty, Color.white);
         Damage.damage(Team.derelict, tx, ty, explosionRadius, strikeDamage * state.intensity);
         Fx.blastExplosion.at(tx, ty);
         Sounds.lightning.at(tx, ty, Mathf.random(0.9f, 1.1f));
