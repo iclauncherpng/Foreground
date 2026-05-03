@@ -495,3 +495,21 @@ task resolveDependencies{
         }
     }
 }
+
+task collectDist(type: Copy) {
+    group = "distribution"
+    description = "Copies all needed files into one dir"
+    into "$rootDir/dist"
+    from("desktop/build/libs") {
+        include "*.jar"
+    }
+    from("server/build/libs") {
+        include "*.jar"
+    }
+    from("android/build/outputs/apk/debug") {
+        include "*.apk"
+    }
+    dependsOn ":desktop:dist"
+    dependsOn ":server:dist"
+    dependsOn ":android:assembleDebug"
+}
