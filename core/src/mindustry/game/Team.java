@@ -6,6 +6,7 @@ import arc.math.*;
 import arc.struct.*;
 import arc.util.*;
 import mindustry.Vars;
+import mindustry.ctype.ContentType;
 import mindustry.game.Rules.*;
 import mindustry.game.Teams.*;
 import mindustry.gen.Groups;
@@ -17,11 +18,11 @@ import arc.struct.IntMap;
 
 import static mindustry.Vars.*;
 
-public class Team implements Comparable<Team>, Senseable{
-    public final int id;
-    public final Color color = new Color();
-    public final Color[] palette = {new Color(), new Color(), new Color()};
-    public final int[] palettei = new int[3];
+public class Team extends mindustry.ctype.Content implements Senseable {
+    public int id;
+    public Color color = new Color();
+    public Color[] palette = {new Color(), new Color(), new Color()};
+    public int[] palettei = new int[3];
     public boolean ignoreUnitCap = false;
     public String emoji = "";
     public boolean hasPalette;
@@ -29,9 +30,9 @@ public class Team implements Comparable<Team>, Senseable{
     public IntMap<Relation> relations = new IntMap<>();
 
     /** All 256 registered teams. */
-    public static final Team[] all = new Team[256];
+    public static Team[] all = new Team[256];
     /** The 6 base teams used in the editor. */
-    public static final Team[] baseTeams = new Team[7];
+    public static Seq<Team> baseTeams = new Seq<>();
 
     static{
         Events.on(EventType.PlayerJoin.class, event -> {
@@ -71,19 +72,25 @@ public class Team implements Comparable<Team>, Senseable{
         return all[((byte)id) & 0xff];
     }
 
-    protected Team(int id, String name, Color color){
+    public Team(){
+    }
+
+    public Team(int id, String name, Color color){
         this.name = name;
         this.color.set(color);
         this.id = id;
 
-        if(id < 7) baseTeams[id] = this;
         all[id] = this;
+
+        if(id < 7 || (!name.startsWith("team#") && !name.equals("neoplastic"))){
+            if(!baseTeams.contains(this)) baseTeams.add(this);
+        }
 
         setPalette(color);
     }
 
     /** Specifies a 3-color team palette. */
-    protected Team(int id, String name, Color color, Color pal1, Color pal2, Color pal3){
+    public Team(int id, String name, Color color, Color pal1, Color pal2, Color pal3){
         this(id, name, color);
 
         setPalette(pal1, pal2, pal3);
@@ -164,8 +171,18 @@ public class Team implements Comparable<Team>, Senseable{
     }
 
     @Override
-    public int compareTo(Team team){
-        return Integer.compare(id, team.id);
+    public ContentType getContentType() {
+        
+        return ContentType.team;
+    }
+
+    @Override
+    public int compareTo(mindustry.ctype.Content other) {
+        if(other instanceof Team team){
+            return Integer.compare(this.id, team.id);
+        }
+        
+        return Integer.compare(this.id, other.id);
     }
 
     @Override

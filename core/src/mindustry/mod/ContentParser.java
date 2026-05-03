@@ -381,7 +381,7 @@ public class ContentParser{
         });
         put(Team.class, (type, data) -> {
             if(data.isString()){
-                Team out = Structs.find(Team.baseTeams, t -> t.name.equals(data.asString()));
+                Team out = Team.baseTeams.find(t -> t.name.equals(data.asString()));
                 if(out == null) throw new IllegalArgumentException("Unknown team: " + data.asString());
                 return out;
             }else if(data.isNumber()){
@@ -393,6 +393,7 @@ public class ContentParser{
                 throw new IllegalArgumentException("Unknown team: " + data.asString() + ". Team must either be a string or a number.");
             }
         });
+
     }};
     /** Stores things that need to be parsed fully, e.g. reading fields of content.
      * This is done to accommodate binding of content names first.*/
@@ -830,6 +831,23 @@ public class ContentParser{
             read(() -> readFields(planet, value));
             return planet;
         },
+        ContentType.customTeam, (TypeParser<Content>)(mod, name, value) -> {
+            int id = value.getInt("id", 50);
+            Team team = Team.get(id);
+            TeamEntry entry;
+            if(locate(ContentType.customTeam, name) != null){
+                entry = locate(ContentType.customTeam, name);
+            }else{
+                entry = new TeamEntry(mod + "-" + name, team);
+            }
+            currentContent = entry;
+            read(() -> {
+                readFields(team, value);
+                if(!Team.baseTeams.contains(team)) Team.baseTeams.add(team);
+                team.setPalette(team.color);
+            });
+            return entry;
+        },
         ContentType.team, (TypeParser<TeamEntry>)(mod, name, value) -> {
             TeamEntry entry;
             Team team;
@@ -852,6 +870,8 @@ public class ContentParser{
             return entry;
         }
     );
+
+
 
     Prov<Unit> unitType(JsonValue value){
         if(value == null) return UnitEntity::create;

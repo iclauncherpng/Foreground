@@ -120,6 +120,7 @@ public class ClassMap{
         classes.put("SectorPreset", mindustry.type.SectorPreset.class);
         classes.put("StatusEffect", mindustry.type.StatusEffect.class);
         classes.put("TransitionHandler", mindustry.type.StatusEffect.TransitionHandler.class);
+        classes.put("Team", mindustry.game.Team.class);
         classes.put("TeamEntry", mindustry.type.TeamEntry.class);
         classes.put("UnitType", mindustry.type.UnitType.class);
         classes.put("UnitEngine", mindustry.type.UnitType.UnitEngine.class);

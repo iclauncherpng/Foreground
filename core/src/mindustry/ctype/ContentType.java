@@ -3,6 +3,7 @@ package mindustry.ctype;
 import arc.util.*;
 import mindustry.ai.*;
 import mindustry.entities.bullet.*;
+import mindustry.game.Team;
 import mindustry.type.*;
 import mindustry.world.*;
 
@@ -25,6 +26,7 @@ public enum ContentType{
     planet(Planet.class),
     ammo_UNUSED(null),
     team(TeamEntry.class),
+    customTeam(mindustry.game.Team.class),
     unitCommand(UnitCommand.class),
     unitStance(UnitStance.class);
 
