@@ -107,7 +107,7 @@ public class LoadRenderer implements Disposable{
                 font.setColor(Pal.accent);
                 font.draw("Foreground", w / 2f, h / 2f + lineH, Align.center);
                 font.setColor(Color.white);
-                font.draw(Version.buildString() + Version.signString(), w / 2f, h / 2f - lineH / 2f, Align.center);
+                font.draw(Version.combined(), w / 2f, h / 2f - lineH / 2f, Align.center);
                 if(assets.getCurrentLoading() != null){
                     String name = assets.getCurrentLoading().fileName;
                     if(name.length() > 35) name = "..." + name.substring(name.length() - 32);
