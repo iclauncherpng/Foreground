@@ -243,24 +243,26 @@ public abstract class ClientLauncher extends ApplicationCore implements Platform
                 loader.draw();
             }
             if(assets.update(1000 / loadingFPS)){
-                loader.dispose();
-                loader = null;
-                SoundPriority.init();
-                for(ApplicationListener listener : modules){
-                    listener.init();
-                }
-                mods.eachClass(Mod::init);
-                finished = true;
-                Events.fire(new ClientLoadEvent());
-                Log.info("Total time to load: @ms", Time.timeSinceMillis(beginTime));
-                clientLoaded = true;
-                super.resize(graphics.getWidth(), graphics.getHeight());
-                app.post(() -> app.post(() -> app.post(() -> app.post(() -> {
+                if(true) {
+                    loader.dispose();
+                    loader = null;
+                    SoundPriority.init();
+                    for (ApplicationListener listener : modules) {
+                        listener.init();
+                    }
+                    mods.eachClass(Mod::init);
+                    finished = true;
+                    Events.fire(new ClientLoadEvent());
+                    Log.info("Total time to load: @ms", Time.timeSinceMillis(beginTime));
+                    clientLoaded = true;
                     super.resize(graphics.getWidth(), graphics.getHeight());
+                    app.post(() -> app.post(() -> app.post(() -> app.post(() -> {
+                        super.resize(graphics.getWidth(), graphics.getHeight());
 
-                    //mark initialization as complete
-                    finishLaunch();
-                }))));
+                        //mark initialization as complete
+                        finishLaunch();
+                    }))));
+                }
             }
         }else{
             asyncCore.begin();
