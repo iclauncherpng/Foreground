@@ -327,7 +327,7 @@ public class Vars implements Loadable{
         CacheLayer.init();
 
         if(!headless){
-            Log.info("[Mindustry] Version: @", Version.buildString());
+            Log.info("[Foreground] Version: @", Version.buildString());
         }
 
         dataDirectory = settings.getDataDirectory();
