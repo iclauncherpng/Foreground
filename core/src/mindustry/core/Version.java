@@ -77,6 +77,10 @@ public class Version{
         return build;
     }
 
+    public static int buildNumber(){
+        return number;
+    }
+
     public static String signString(){
         return sign == null || sign.equals("unknown") || sign.isEmpty() ? "" : " [" + sign + "]";
     }
