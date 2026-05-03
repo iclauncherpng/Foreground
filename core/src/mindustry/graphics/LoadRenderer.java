@@ -102,25 +102,25 @@ public class LoadRenderer implements Disposable{
             float lineH = (isMobile ? 14f : 22f) * s;
             font.getData().setScale(isMobile ? 0.4f * s : s);
 
+
             if(isMobile){
                 font.setColor(Pal.accent);
-                font.draw("MINDUSTRY", w / 2f, h / 2f + lineH * 3f, Align.center);
+                font.draw("Foreground", w / 2f, h / 2f + lineH, Align.center);
                 font.setColor(Color.white);
-                font.draw(Version.combined(), w / 2f, h / 2f + lineH * 1.8f, Align.center);
-                font.getData().setScale(0.4f * s);
+                font.draw(Version.buildString() + Version.signString(), w / 2f, h / 2f - lineH / 2f, Align.center);
                 if(assets.getCurrentLoading() != null){
                     String name = assets.getCurrentLoading().fileName;
                     if(name.length() > 35) name = "..." + name.substring(name.length() - 32);
                     font.setColor(Color.lightGray);
-                    font.draw("INIT::" + name, w / 2f, h / 2f - 85f * s, Align.center);
+                    font.draw("INIT::" + name, w / 2f, h / 2f - 90f * s, Align.center);
                 }
             }else{
                 font.setColor(Pal.accent);
-                font.draw(">> SYSTEM_TERMINAL", pad, h - pad);
-                font.draw(">> OS_CORE: [white]" + Version.combined(), pad, h - pad - lineH);
+                font.draw(">> WELCOME BACK, " + OS.username, pad, h - pad);
+                font.draw(">> CORE: [white]" + Version.combined(), pad, h - pad - lineH);
 
                 font.setColor(Color.white);
-                font.draw("BUILD: " + Version.buildString(), w - pad, h - pad, Align.right);
+                font.draw("BUILD_NUM: " + Version.buildNumber(), w - pad, h - pad, Align.right);
 
                 Lines.stroke(2f * s);
                 Draw.color(Pal.accent, 0.4f);
