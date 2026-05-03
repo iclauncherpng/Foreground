@@ -11,6 +11,7 @@ import arc.input.*;
 import arc.math.*;
 import arc.math.geom.*;
 import arc.scene.*;
+import arc.scene.actions.Actions;
 import arc.scene.event.*;
 import arc.scene.style.*;
 import arc.scene.ui.*;
@@ -903,20 +904,50 @@ public class PlanetDialog extends BaseDialog implements PlanetInterfaceRenderer{
 
     public void viewPlanet(Planet planet, boolean pan){
         if(state.planet != planet){
-            selected = null;
-            if(pan){
-                state.otherCamPos = state.planet.position;
-                state.otherCamAlpha = 0;
-            }
-            newPresets.clear();
-            state.planet = planet;
+            Table overlay = new Table(Tex.whiteui);
+            overlay.color.set(Color.black);
+            overlay.color.a = 0f;
+            overlay.setFillParent(true);
+            overlay.touchable = Touchable.enabled;
 
-            clampZoom();
+            addChild(overlay);
+            overlay.toFront();
 
-            selected = null;
-            updateSelected();
-            rebuildExpand();
-            settings.put("lastplanet", planet.name);
+            
+            Label.LabelStyle style = new Label.LabelStyle(Styles.techLabel);
+            style.fontColor = planet.iconColor;
+
+            
+            String planetName = planet.name.replace('_', ' ').toUpperCase();
+            Label planetLabel = new Label(planetName, style);
+            overlay.add(planetLabel).center(); 
+
+            overlay.addAction(Actions.sequence(
+                    Actions.fadeIn(0.2f, Interp.pow3Out),
+
+                    Actions.run(() -> {
+                        
+                        selected = null; 
+
+                        if(pan){
+                            state.otherCamPos = state.planet.position;
+                            state.otherCamAlpha = 0;
+                        }
+                        newPresets.clear();
+
+                        state.planet = planet;
+
+                        clampZoom();
+                        updateSelected(); 
+                        rebuildExpand();
+
+                        settings.put("lastplanet", planet.name);
+                    }),
+
+                    Actions.delay(0.5f),
+                    Actions.fadeOut(0.25f, Interp.pow3In),
+                    Actions.remove()
+            ));
         }
     }
 
