@@ -28,6 +28,7 @@ public class Team extends mindustry.ctype.Content implements Senseable {
     public boolean hasPalette;
     public String name;
     public IntMap<Relation> relations = new IntMap<>();
+    public @Nullable mindustry.type.Item requiredItem = null;
 
     /** All 256 registered teams. */
     public static Team[] all = new Team[256];
