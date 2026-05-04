@@ -19,6 +19,7 @@ import mindustry.game.EventType.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.ui.*;
+import mindustry.ui.dialogs.AboutDialog;
 import mindustry.ui.dialogs.AchievementDialog;
 import mindustry.ui.dialogs.CLDialog;
 
@@ -248,8 +249,9 @@ public class MenuFragment{
                                 new MenuButton("@database", Icon.book, () -> ui.database.show()),
                                 new MenuButton("@achievement", Icon.logic, () -> new AchievementDialog().show())
                         ),
-                        new MenuButton("@changelogb", Icon.infoCircle, () -> new CLDialog().show()),
                         new MenuButton("@editor", Icon.terrain, () -> checkPlay(() -> ui.maps.show())), steam ? new MenuButton("@workshop", Icon.steam, () -> platform.openWorkshop()) : null,
+                        new MenuButton("@changelogb", Icon.infoCircle, () -> new CLDialog().show()),
+                        new MenuButton("@about", Icon.arrowNote, () -> new AboutDialog().show()),
                         new MenuButton("@settings", Icon.settings, () -> ui.settings.show())
                 );
             }

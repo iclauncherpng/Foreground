@@ -83,6 +83,7 @@ public class AboutDialog extends BaseDialog{
         addCloseButton();
 
         buttons.button("@credits", this::showCredits).size(200f, 64f);
+        buttons.button("@api", () -> new ApiDialog().show()).size(200f, 64f);
 
     }
 

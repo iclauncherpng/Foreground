@@ -15,7 +15,8 @@ public class Links{
 
     private static void createLinks(){
         links = new LinkEntry[]{
-        new LinkEntry("discord", "https://discord.gg/mindustry", Icon.discord, Color.valueOf("7289da")),
+        new LinkEntry("mindustry", "https://discord.gg/mindustry", Icon.discord, Color.valueOf("7289da")),
+        new LinkEntry("foreground", "https://discord.gg/mindustry", Icon.discord, Color.valueOf("7289da")),
         //new LinkEntry("changelog", "https://github.com/Anuken/Mindustry/releases", Icon.list, Pal.accent.cpy()),
         //new LinkEntry("trello", "https://trello.com/b/aE2tcUwF", Icon.trello, Color.valueOf("026aa7")),
         //new LinkEntry("wiki", "https://mindustrygame.github.io/wiki/", Icon.book, Color.valueOf("0f142f")),
@@ -24,7 +25,7 @@ public class Links{
         //new LinkEntry("itch.io", "https://anuke.itch.io/mindustry", Icon.itchio, Color.valueOf("fa5c5c")),
         //new LinkEntry("google-play", "https://play.google.com/store/apps/details?id=io.anuke.mindustry", Icon.googleplay, Color.valueOf("689f38")),
         //new LinkEntry("f-droid", "https://f-droid.org/packages/io.anuke.mindustry/", Icon.android, Color.valueOf("026aa7")),
-        new LinkEntry("gitea", "http://127.0.0.1:3000/Foreground/Mindustry", Icon.github, Color.valueOf("24292e")),
+        new LinkEntry("github", "https://github.com/iclauncherpng/Foreground", Icon.github, Color.valueOf("24292e")),
         //new LinkEntry("bug", "https://github.com/Anuken/Mindustry/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml", Icon.wrench, Color.valueOf("cbd97f"))
         };
     }
