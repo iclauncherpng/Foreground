@@ -831,23 +831,26 @@ public class ContentParser{
             read(() -> readFields(planet, value));
             return planet;
         },
-        ContentType.customTeam, (TypeParser<Content>)(mod, name, value) -> {
-            int id = value.getInt("id", 50);
-            Team team = Team.get(id);
-            TeamEntry entry;
-            if(locate(ContentType.customTeam, name) != null){
-                entry = locate(ContentType.customTeam, name);
-            }else{
-                entry = new TeamEntry(mod + "-" + name, team);
-            }
-            currentContent = entry;
-            read(() -> {
-                readFields(team, value);
-                if(!Team.baseTeams.contains(team)) Team.baseTeams.add(team);
-                team.setPalette(team.color);
-            });
-            return entry;
-        },
+            ContentType.customTeam, (TypeParser<Content>)(mod, name, value) -> {
+                int id = value.getInt("id", -1);
+                if (id < 10 || id > 40) {
+                    throw new RuntimeException("Custom Team ID in mod '" + mod + "' must be between 10 and 40. Found: " + id);
+                }
+                Team team = Team.get(id);
+                TeamEntry entry;
+                if(locate(ContentType.customTeam, name) != null){
+                    entry = locate(ContentType.customTeam, name);
+                } else {
+                    entry = new TeamEntry(mod + "-" + name, team);
+                }
+                currentContent = entry;
+                read(() -> {
+                    readFields(team, value);
+                    if(!Team.baseTeams.contains(team)) Team.baseTeams.add(team);
+                    team.setPalette(team.color);
+                });
+                return entry;
+            },
         ContentType.team, (TypeParser<TeamEntry>)(mod, name, value) -> {
             TeamEntry entry;
             Team team;
