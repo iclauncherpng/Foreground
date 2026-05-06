@@ -89,6 +89,7 @@ public class Version{
     public static String combined() {
         if (build.equals("-1")) return "Custom Build";
         String modSuffix = switch (modifier) {
+            case "canary" -> "-canary-" + revision;
             case "devtest" -> "-devtest-" + revision;
             case "alpha" -> "a";
             case "beta" -> "b";
