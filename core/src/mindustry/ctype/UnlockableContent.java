@@ -107,12 +107,12 @@ public abstract class UnlockableContent extends MappableContent{
     @Override
     public void loadIcon(){
         fullIcon =
-            Core.atlas.find(fullOverride == null ? "" : fullOverride,
-            Core.atlas.find(getContentType().name() + "-" + name + "-full",
-            Core.atlas.find(name + "-full",
-            Core.atlas.find(name,
-            Core.atlas.find(getContentType().name() + "-" + name,
-            Core.atlas.find(name + "1"))))));
+                Core.atlas.find(fullOverride == null ? "" : fullOverride,
+                        Core.atlas.find(getContentType().name() + "-" + name + "-full",
+                                Core.atlas.find(name + "-full",
+                                        Core.atlas.find(name,
+                                                Core.atlas.find(getContentType().name() + "-" + name,
+                                                        Core.atlas.find(name + "1"))))));
 
         uiIcon = Core.atlas.find(getContentType().name() + "-" + name + "-ui", fullIcon);
     }
@@ -265,8 +265,8 @@ public abstract class UnlockableContent extends MappableContent{
     /** @return in multiplayer, whether this is unlocked for the host player, otherwise, whether it is unlocked for the local player (same as unlocked()) */
     public boolean unlockedHost(){
         return net != null && net.client() ?
-            alwaysUnlocked || state.rules.researched.contains(this) :
-            unlocked || alwaysUnlocked;
+                alwaysUnlocked || state.rules.researched.contains(this) :
+                unlocked || alwaysUnlocked;
     }
 
     /** @return whether this content is unlocked, or the player is in a custom (non-campaign) game. */
@@ -276,8 +276,8 @@ public abstract class UnlockableContent extends MappableContent{
 
     public boolean unlocked(){
         return net != null && net.client() ?
-            alwaysUnlocked || unlocked || state.rules.researched.contains(this) :
-            unlocked || alwaysUnlocked;
+                alwaysUnlocked || unlocked || state.rules.researched.contains(this) :
+                unlocked || alwaysUnlocked;
     }
 
     /** Locks this content again. */
