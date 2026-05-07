@@ -1,4 +1,4 @@
-## Translating for Mindustry
+## Translating for Mindustry (foreground)
 
 To begin, log in to your GitHub account, or if you don't have one yet, create it [here](https://github.com/).
 
