@@ -309,6 +309,21 @@ public class CoreBlock extends StorageBlock{
             }
             drawPlaceText(message, x, y, valid);
         }
+
+        if(state.rules.diplomacy) {
+            float range = TerritorySystem.territoryBlocks.get(this, 0f);
+            if (range > 1f) {
+                float side = range * 0.7071f;
+                float centerX = x * 8f + offset;
+                float centerY = y * 8f + offset;
+                Draw.color(Pal.placing);
+                Lines.stroke(1.5f);
+                Lines.rect(centerX - side, centerY - side, side * 2, side * 2);
+                Draw.alpha(0.05f);
+                Fill.rect(centerX, centerY, side * 2, side * 2);
+                Draw.reset();
+            }
+        }
     }
 
     public class CoreBuild extends Building implements LaunchAnimator{

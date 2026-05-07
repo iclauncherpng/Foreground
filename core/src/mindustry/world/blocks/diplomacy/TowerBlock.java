@@ -195,4 +195,21 @@ public class TowerBlock extends Wall {
             broken = read.bool();
         }
     }
+
+    @Override
+    public void drawPlace(int x, int y, int rotation, boolean valid) {
+        super.drawPlace(x, y, rotation, valid);
+        float range = TerritorySystem.territoryBlocks.get(this, 0f);
+        if (range > 1f) {
+            float side = range * 0.7071f;
+            float centerX = x * 8f + offset;
+            float centerY = y * 8f + offset;
+            Draw.color(Pal.placing);
+            Lines.stroke(1.5f);
+            Lines.rect(centerX - side, centerY - side, side * 2, side * 2);
+            Draw.alpha(0.05f);
+            Fill.rect(centerX, centerY, side * 2, side * 2);
+            Draw.reset();
+        }
+    }
 }
