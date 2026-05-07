@@ -32,7 +32,7 @@ import static mindustry.Vars.*;
 public class FloorRenderer{
     private static final VertexAttribute[] attributes = {VertexAttribute.packedPosition, VertexAttribute.color, VertexAttribute.packedTexCoords};
     private static final int
-        chunksize = 30, //todo 32?
+        chunksize = 32,
         chunkunits = chunksize * tilesize,
         vertexSize = 1 + 1 + 1,
         spriteSize = vertexSize * 4,
