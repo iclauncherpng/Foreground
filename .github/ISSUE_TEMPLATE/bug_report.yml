@@ -26,7 +26,7 @@ body:
     attributes:
       label: Build
       description: The build number under the title in the main menu.
-      placeholder: "EXACT BUILD NUMBER (e.g., 146). DO NOT WRITE 'LATEST'."
+      placeholder: "EXACT BUILD NUMBER (e.g., 1.0.1). DO NOT WRITE 'LATEST'."
     validations:
       required: true
   - type: textarea
