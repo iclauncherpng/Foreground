@@ -1,0 +1,80 @@
+name: Bug report
+description: Report a bug for the Foreground project
+title: "[Bug]: "
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out this form as accurately as possible to help us identify and fix the issue.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platforms
+      description: On what platforms do you know the bug happens?
+      options:
+        - Android
+        - iOS
+        - Mac
+        - Windows
+        - Linux
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: Build
+      description: The build number under the title in the main menu.
+      placeholder: "EXACT BUILD NUMBER (e.g., 146). DO NOT WRITE 'LATEST'."
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue
+      description: Explain your issue in detail.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: How you happened across the issue, and what exactly you did to make the bug happen.
+    validations:
+      required: true
+  - type: textarea
+    id: mods
+    attributes:
+      label: Mods used
+      description: The mod repositories or zip files that are related to the issue, if applicable.
+    validations:
+      required: false
+  - type: textarea
+    id: save-file
+    attributes:
+      label: Save file
+      description: Attach the (zipped) save file or export data here.
+      placeholder: "REQUIRED FOR IN-GAME ISSUES. Settings -> Game Data -> Export Data."
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: (Crash) logs
+      description: Attach crash reports or logs from Settings -> Game Data -> Export Crash logs.
+      render: shell
+    validations:
+      required: false
+  - type: checkboxes
+    id: agreement
+    attributes:
+      label: Submission Agreement
+      description: Check the boxes to confirm.
+      options:
+        - label: I have updated to the latest release of Foreground to make sure my issue has not been fixed.
+          required: true
+        - label: I have searched existing issues to make sure this problem has not already been reported.
+          required: true
+        - label: I am not using Foo's Client, and have made sure the bug is not caused by third-party mods.
+          required: true

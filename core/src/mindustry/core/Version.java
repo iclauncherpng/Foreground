@@ -90,7 +90,6 @@ public class Version{
         if (build.equals("-1")) return "Custom Build";
         String modSuffix = switch (modifier) {
             case "canary" -> "-canary-" + revision;
-            case "devtest" -> "-devtest-" + revision;
             case "alpha" -> "a";
             case "beta" -> "b";
             case "snapshot" -> "-snapshot-" + revision;
@@ -99,6 +98,11 @@ public class Version{
             default -> " " + Strings.capitalize(modifier);
         };
         String result = build + modSuffix;
+
+        if (modifier.equals("canary")) {
+            result = "[#eb7434]" + result + "[]";
+        }
+
         if (!type.equals("official")) {
             String typePrefix = type.equals("custom") ? "[#fc8140aa]Custom Build[]" : Strings.capitalize(type);
             result = typePrefix + " " + result;

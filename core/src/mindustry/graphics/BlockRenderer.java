@@ -49,10 +49,10 @@ public class BlockRenderer{
     private IntSet darkEvents = new IntSet();
     private IntSet procLinks = new IntSet(), procLights = new IntSet();
 
-    private BlockQuadtree blockTree = new BlockQuadtree(new Rect(0, 0, 1, 1));
-    private BlockLightQuadtree blockLightTree = new BlockLightQuadtree(new Rect(0, 0, 1, 1));
-    private OverlayQuadtree overlayTree = new OverlayQuadtree(new Rect(0, 0, 1, 1));
-    private FloorQuadtree floorTree = new FloorQuadtree(new Rect(0, 0, 1, 1));
+    private ChunkedQuadTree<Tile> blockTree = new ChunkedQuadTree<>(1024f, () -> new BlockQuadtree());
+    private ChunkedQuadTree<Tile> blockLightTree = new ChunkedQuadTree<>(1024f, () -> new BlockLightQuadtree());
+    private ChunkedQuadTree<Tile> overlayTree = new ChunkedQuadTree<>(1024f, () -> new OverlayQuadtree());
+    private ChunkedQuadTree<Tile> floorTree = new ChunkedQuadTree<>(1024f, () -> new FloorQuadtree());
 
     public BlockRenderer(){
 
@@ -113,10 +113,10 @@ public class BlockRenderer{
     }
 
     public void reload(){
-        blockTree = new BlockQuadtree(new Rect(0, 0, world.unitWidth(), world.unitHeight()));
-        blockLightTree = new BlockLightQuadtree(new Rect(0, 0, world.unitWidth(), world.unitHeight()));
-        overlayTree = new OverlayQuadtree(new Rect(0, 0, world.unitWidth(), world.unitHeight()));
-        floorTree = new FloorQuadtree(new Rect(0, 0, world.unitWidth(), world.unitHeight()));
+        blockTree.clear();
+        blockLightTree.clear();
+        overlayTree.clear();
+        floorTree.clear();
 
         shadowEvents.clear();
         updateFloors.clear();
@@ -578,7 +578,7 @@ public class BlockRenderer{
     }
 
     static class BlockQuadtree extends QuadTree<Tile>{
-
+        public BlockQuadtree() { super(new Rect()); }
         public BlockQuadtree(Rect bounds){
             super(bounds);
         }
@@ -596,7 +596,7 @@ public class BlockRenderer{
     }
 
     static class BlockLightQuadtree extends QuadTree<Tile>{
-
+        public BlockLightQuadtree() { super(new Rect()); }
         public BlockLightQuadtree(Rect bounds){
             super(bounds);
         }
@@ -614,6 +614,7 @@ public class BlockRenderer{
     }
 
     static class OverlayQuadtree extends QuadTree<Tile>{
+        public OverlayQuadtree() { super(new Rect()); }
         public OverlayQuadtree(Rect bounds){
             super(bounds);
         }
@@ -630,20 +631,24 @@ public class BlockRenderer{
         }
     }
 
-    static class FloorQuadtree extends QuadTree<Tile>{
+    static class FloorQuadtree extends QuadTree<Tile> {
+        
+        public FloorQuadtree() {
+            super(new Rect());
+        }
 
-        public FloorQuadtree(Rect bounds){
+        public FloorQuadtree(Rect bounds) {
             super(bounds);
         }
 
         @Override
-        public void hitbox(Tile tile){
+        public void hitbox(Tile tile) {
             var floor = tile.floor();
             tmp.setCentered(tile.worldx(), tile.worldy(), floor.lightClipSize, floor.lightClipSize);
         }
 
         @Override
-        protected QuadTree<Tile> newChild(Rect rect){
+        protected QuadTree<Tile> newChild(Rect rect) {
             return new FloorQuadtree(rect);
         }
     }
