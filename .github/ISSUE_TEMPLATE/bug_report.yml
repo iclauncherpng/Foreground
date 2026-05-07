@@ -15,8 +15,6 @@ body:
       description: On what platforms do you know the bug happens?
       options:
         - Android
-        - iOS
-        - Mac
         - Windows
         - Linux
     validations:
