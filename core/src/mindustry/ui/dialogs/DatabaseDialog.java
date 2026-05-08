@@ -32,7 +32,7 @@ public class DatabaseDialog extends BaseDialog{
 
     private @Nullable Seq<UnlockableContent> allTabs;
     //sun means "all content"
-    private UnlockableContent tab = Planets.sun;
+    private @Nullable UnlockableContent tab = null;
 
     public DatabaseDialog(){
         super("@database");
@@ -76,7 +76,7 @@ public class DatabaseDialog extends BaseDialog{
                 }
             }
             allTabs = all.toSeq().sort();
-            allTabs.insert(0, Planets.sun);
+            allTabs.insert(0, null);
         }
     }
 
@@ -109,10 +109,10 @@ public class DatabaseDialog extends BaseDialog{
         all.table(t -> {
             int i = 0;
             for(var content : allTabs){
-                t.button(content == Planets.sun ? Icon.eyeSmall : content instanceof Planet p ? Icon.icons.get(p.icon, Icon.commandRally) : new TextureRegionDrawable(content.uiIcon), Styles.clearNoneTogglei, iconMed, () -> {
+                t.button(content == null ? Icon.eyeSmall : content instanceof Planet p ? Icon.icons.get(p.icon, Icon.commandRally) : new TextureRegionDrawable(content.uiIcon), Styles.clearNoneTogglei, iconMed, () -> {
                     tab = content;
                     rebuild();
-                }).size(50f).checked(b -> tab == content).tooltip(content == Planets.sun ? "@all" : content.localizedName).with(but -> {
+                }).size(50f).checked(b -> tab == content).tooltip(content == null ? "@all" : content.localizedName).with(but -> {
                     but.getStyle().imageUpColor = content instanceof Planet p ? p.iconColor : Color.white.cpy();
                 });
 
@@ -136,7 +136,7 @@ public class DatabaseDialog extends BaseDialog{
                             b.category == Category.stone
                     )) return false;
                     return !u.isHidden() && !u.hideDatabase &&
-                            (tab == Planets.sun || u.allDatabaseTabs || u.databaseTabs.contains(tab)) &&
+                            (tab == null || u.allDatabaseTabs || u.databaseTabs.contains(tab)) &&
                             (text.isEmpty() || u.localizedName.toLowerCase(Locale.ROOT).contains(text));
                 }).as();
                 if(array.isEmpty()) continue;
