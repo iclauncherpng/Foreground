@@ -210,7 +210,7 @@ public class Blocks{
 
         //removeWall = new RemoveWall("remove-wall");
         removeWall = new RemoveWall("remove-wall"){{
-            requirements(Category.stone, with(Items.graphite, 0));
+            requirements(Category.stone, with());
             buildVisibility = BuildVisibility.shown;
         }};
 
