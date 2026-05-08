@@ -420,7 +420,7 @@ public class SettingsMenuDialog extends BaseDialog{
 
         graphics.sliderPref("unitlaseropacity", 100, 0, 100, 5, s -> s + "%");
         graphics.sliderPref("bridgeopacity", 100, 0, 100, 5, s -> s + "%");
-        graphics.sliderPref("territoryopacity", 100, 0, 100, 5, s -> s + "%");
+        graphics.sliderPref("territoryopacity", 15, 0, 50, 5, s -> s + "%");
 
         graphics.sliderPref("maxmagnificationmultiplierpercent", 100, 100, 200, 25, s -> {
             if(ui.settings != null){
