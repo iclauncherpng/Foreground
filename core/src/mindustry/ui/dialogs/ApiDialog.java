@@ -12,9 +12,8 @@ public class ApiDialog extends BaseDialog{
         cont.margin(30f);
         cont.table(t -> {
             t.background(Tex.button);
-            
-            t.add("[accent]Mod API:[] [lightgray]v26.1[]").left().pad(5f).row();
-            t.add("[accent]ARC:[] [lightgray]v1[]").left().pad(5f).row();
+
+            t.add("[accent]ARC:[] [lightgray]v2026.1.0.4-alpha-0[]").left().pad(5f).row();
         }).pad(20f).row();
 
         addCloseButton();

@@ -130,6 +130,8 @@ public class Blocks{
 
     unitCargoLoader, unitCargoUnloadPoint,
 
+    bigrouter,
+
     //liquid
     mechanicalPump, rotaryPump, impulsePump, conduit, pulseConduit, platedConduit, liquidRouter, liquidContainer, liquidTank, liquidJunction, bridgeConduit, phaseConduit,
 
@@ -7089,6 +7091,16 @@ public class Blocks{
             buildVisibility = BuildVisibility.diplomacyOnly;
             health = 60;
             itemCapacity = 5;
+        }};
+
+
+
+
+        bigrouter = new Router("bigrouter"){{
+            requirements(Category.experiments, with(Items.copper, 3));
+            size = 16;
+            buildCostMultiplier = 4f;
+            itemCapacity = 1337;
         }};
 
         //endregion
