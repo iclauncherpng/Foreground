@@ -16,6 +16,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
+import mindustry.world.Block;
 
 import java.util.*;
 
@@ -124,27 +125,26 @@ public class DatabaseDialog extends BaseDialog{
         for(int i = 0; i < sortedContents.size; i++){
             String categoryName = sortedContents.orderedKeys().get(i);
             OrderedMap<String, Seq<UnlockableContent>> categoryContents = sortedContents.get(categoryName);
-
             tmpCategory.clear();
-
             boolean categoryHasResult = false;
-
             for(int j = 0; j < categoryContents.size; j++){
                 String tagName = categoryContents.orderedKeys().get(j);
-                Seq<UnlockableContent> array = categoryContents.get(tagName).select(u ->
-                !u.isHidden() && !u.hideDatabase &&
-                (tab == Planets.sun || u.allDatabaseTabs || u.databaseTabs.contains(tab)) &&
-                (text.isEmpty() || u.localizedName.toLowerCase(Locale.ROOT).contains(text))).as();
+                Seq<UnlockableContent> array = categoryContents.get(tagName).select(u -> {
+                    if(u instanceof Block b && (
+                            b.category == Category.experiments ||
+                            b.category == Category.terrain ||
+                            b.category == Category.stone
+                    )) return false;
+                    return !u.isHidden() && !u.hideDatabase &&
+                            (tab == Planets.sun || u.allDatabaseTabs || u.databaseTabs.contains(tab)) &&
+                            (text.isEmpty() || u.localizedName.toLowerCase(Locale.ROOT).contains(text));
+                }).as();
                 if(array.isEmpty()) continue;
-
                 hasResult = true;
                 categoryHasResult = true;
-
-                //sorting only makes sense when in-game; otherwise, banned blocks can't exist
                 if(state.isGame()){
                     array.sort(Structs.comps(Structs.comparingBool(UnlockableContent::isBanned), Structs.comparingInt(u -> u.id)));
                 }
-
                 tmpCategory.put(tagName, array);
             }
 
