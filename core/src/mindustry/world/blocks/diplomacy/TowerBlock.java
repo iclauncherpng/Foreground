@@ -6,6 +6,7 @@ import arc.math.*;
 import arc.util.*;
 import arc.util.io.*;
 import arc.scene.ui.layout.*;
+import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.core.UI;
 import mindustry.entities.*;
@@ -204,8 +205,9 @@ public class TowerBlock extends Wall {
             float side = range * 0.7071f;
             float centerX = x * 8f + offset;
             float centerY = y * 8f + offset;
-            Draw.color(Pal.placing);
+            Draw.color(Vars.player.team().color);
             Lines.stroke(1.5f);
+            if(!valid) Draw.color(Pal.remove);
             Lines.rect(centerX - side, centerY - side, side * 2, side * 2);
             Draw.alpha(0.05f);
             Fill.rect(centerX, centerY, side * 2, side * 2);

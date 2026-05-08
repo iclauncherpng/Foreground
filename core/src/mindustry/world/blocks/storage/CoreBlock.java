@@ -316,7 +316,7 @@ public class CoreBlock extends StorageBlock{
                 float side = range * 0.7071f;
                 float centerX = x * 8f + offset;
                 float centerY = y * 8f + offset;
-                Draw.color(Pal.placing);
+                Draw.color(Vars.player.team().color);
                 Lines.stroke(1.5f);
                 Lines.rect(centerX - side, centerY - side, side * 2, side * 2);
                 Draw.alpha(0.05f);
