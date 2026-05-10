@@ -524,7 +524,9 @@ public class Weapon implements Cloneable{
             bullet.smokeEffect.at(bulletX, bulletY, angle, bullet.hitColor, unit);
         }
 
-        unit.vel.add(Tmp.v1.trns(shootAngle + 180f, bullet.recoil));
+        if(recoil > 0) {
+            unit.vel.add(Tmp.v1.trns(shootAngle + 180f, recoil / unit.type.unitMass));
+        }
         Effect.shake(shake, shake, bulletX, bulletY);
         mount.recoil = 1f;
         if(recoils > 0){
