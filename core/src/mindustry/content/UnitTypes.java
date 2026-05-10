@@ -163,6 +163,7 @@ public class UnitTypes{
             stepSound = Sounds.mechStepSmall;
             stepSoundPitch = 0.8f;
             stepSoundVolume = 0.65f;
+            unitMass = 12f;
 
             weapons.add(new Weapon("artillery"){{
                 top = false;
@@ -205,6 +206,7 @@ public class UnitTypes{
             stepSound = Sounds.mechStep;
             stepSoundPitch = 0.9f;
             stepSoundVolume = 0.35f;
+            unitMass = 80f;
 
             abilities.add(new ShieldRegenFieldAbility(25f, 250f, 60f * 1, 60f));
 
@@ -306,6 +308,7 @@ public class UnitTypes{
             stepSound = Sounds.mechStepHeavy;
             stepSoundPitch = 0.9f;
             stepSoundVolume = 0.45f;
+            unitMass = 150f;
 
             weapons.add(
             new Weapon("reign-weapon"){{
@@ -370,6 +373,8 @@ public class UnitTypes{
             abilities.add(new RepairFieldAbility(10f, 60f * 4, 60f));
             ammoType = new PowerAmmoType(1000);
 
+            unitMass = 5f;
+
             weapons.add(new Weapon("heal-weapon"){{
                 top = false;
                 shootY = 2f;
@@ -402,6 +407,8 @@ public class UnitTypes{
 
             mineTier = 2;
             mineSpeed = 3f;
+
+            unitMass = 8f;
 
             abilities.add(new ShieldRegenFieldAbility(20f, 40f, 60f * 5, 60f));
             ammoType = new PowerAmmoType(1300);
@@ -461,6 +468,8 @@ public class UnitTypes{
             stepSound = Sounds.mechStepSmall;
             stepSoundPitch = 0.9f;
             stepSoundVolume = 0.6f;
+
+            unitMass = 14f;
 
             speed = 0.5f;
             hitSize = 13f;
@@ -758,6 +767,8 @@ public class UnitTypes{
             armor = 5f;
             ammoType = new PowerAmmoType(1000);
 
+            unitMass = 6f;
+
             shadowElevation = 0.3f;
             groundLayer = Layer.legUnit;
 
@@ -837,6 +848,8 @@ public class UnitTypes{
 
             legSplashDamage = 32;
             legSplashRange = 30;
+
+            unitMass = 25f;
 
             hovering = true;
             shadowElevation = 0.65f;
@@ -927,6 +940,7 @@ public class UnitTypes{
 
             rotateSpeed = 1.9f;
 
+            unitMass = 100f;
             legCount = 8;
             legMoveSpace = 0.8f;
             legPairOffset = 3;
@@ -1114,6 +1128,8 @@ public class UnitTypes{
             rotateSpeed = 4.5f;
             circleTargetRadius = 40f;
 
+            unitMass = 9999f;
+
             moveSound = Sounds.loopThruster;
             moveSoundPitchMin = 0.6f;
             moveSoundVolume = 0.4f;
@@ -1154,6 +1170,8 @@ public class UnitTypes{
             lowAltitude = true;
             forceMultiTarget = true;
             armor = 5f;
+
+            unitMass = 15f;
 
             targetFlags = new BlockFlag[]{BlockFlag.launchPad, BlockFlag.storage, BlockFlag.battery, null};
             engineOffset = 12f;
@@ -1205,6 +1223,8 @@ public class UnitTypes{
             hitSize = 46f;
             targetFlags = new BlockFlag[]{BlockFlag.generator, BlockFlag.core, null};
             ammoType = new ItemAmmoType(Items.thorium);
+
+            unitMass = 50f;
 
             loopSound = Sounds.loopHover;
 
@@ -1282,6 +1302,8 @@ public class UnitTypes{
             armor = 13f;
             targetFlags = new BlockFlag[]{BlockFlag.reactor, BlockFlag.battery, BlockFlag.core, null};
             ammoType = new ItemAmmoType(Items.thorium);
+
+            unitMass = 70f;
 
             loopSound = Sounds.loopHover;
 
@@ -2519,6 +2541,7 @@ public class UnitTypes{
             controller = u -> u.team.isAI() ? new BuilderAI(true, 400f) : new CommandAI();
             isEnemy = false;
 
+            unitMass = 1f;
             targetBuildingsMobile = false;
             lowAltitude = true;
             flying = true;
@@ -2583,6 +2606,8 @@ public class UnitTypes{
             hitSize = 9f;
             lowAltitude = true;
 
+            unitMass = 4f;
+
             weapons.add(new Weapon("small-mount-weapon"){{
                 top = false;
                 reload = 20f;
@@ -2632,6 +2657,8 @@ public class UnitTypes{
             health = 220f;
             engineOffset = 6f;
             hitSize = 11f;
+
+            unitMass = 8f;
 
             weapons.add(new Weapon("small-mount-weapon"){{
                 top = false;
