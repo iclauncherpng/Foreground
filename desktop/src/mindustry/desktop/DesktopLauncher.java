@@ -50,7 +50,7 @@ public class DesktopLauncher extends ClientLauncher{
             checkJavaVersion();
 
             new SdlApplication(new DesktopLauncher(arg), new SdlConfig(){{
-                title = "Foreground";
+                title = "Foreground " + Version.buildString();
                 maximized = true;
                 stencil = 8;
                 coreProfile = true;
