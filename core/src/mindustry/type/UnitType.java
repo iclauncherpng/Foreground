@@ -519,6 +519,10 @@ public class UnitType extends UnlockableContent implements Senseable{
     public TextureRegion[] wreckRegions, segmentRegions, segmentCellRegions, segmentOutlineRegions;
     public TextureRegion[][] treadRegions;
 
+    //PHYS
+
+    public float unitMass = 1f;
+
     //INTERNAL REQUIREMENTS
 
     protected float buildTime = -1f;
@@ -914,6 +918,10 @@ public class UnitType extends UnlockableContent implements Senseable{
         checkEntityMapping(example);
 
         allowLegStep = example instanceof Legsc || example instanceof Crawlc;
+
+        if(unitMass == 1f) {
+            unitMass = Mathf.clamp(hitSize / 4f, 0.5f, 100f);
+        }
 
         //water preset
         if(example instanceof WaterMovec || example instanceof WaterCrawlc){
