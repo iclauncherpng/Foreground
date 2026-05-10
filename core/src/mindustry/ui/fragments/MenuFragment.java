@@ -126,6 +126,11 @@ public class MenuFragment{
                 Fonts.outline.draw("[red]⚠ Unstable Indev Build ⚠", fx, fy - logoh/2f - Scl.scl(22f), Align.center);
             }
 
+            if(!Version.sign.isEmpty()){
+                Fonts.outline.setColor(Pal.accent);
+                Fonts.outline.draw("[green]⚠ IBS" + Version.signString() + " ⚠", fx, fy - logoh/2f - Scl.scl(22f), Align.center);
+            }
+
             Draw.color();
             Draw.rect(logo, fx, fy, logow, logoh);
 

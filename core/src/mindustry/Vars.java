@@ -76,7 +76,7 @@ public class Vars implements Loadable{
     /** global charset, since Android doesn't support the Charsets class */
     public static final Charset charset = Charset.forName("UTF-8");
     /** main application name, capitalized */
-    public static final String appName = Version.modifier.contains("canary")
+    public static final String appName = (Version.modifier.contains("canary") || Version.modifier.contains("indev"))
             ? "ForegroundCanary"
             : "Foreground";
     /** Github API URL. */
