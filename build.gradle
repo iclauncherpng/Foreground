@@ -210,7 +210,6 @@ allprojects{
                     "--add-exports=java.base/sun.reflect.annotation=ALL-UNNAMED"
             ])
 
-            // Для рантайма компилятора
             options.forkOptions.jvmArgs.addAll([
                     "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
                     "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
@@ -222,8 +221,8 @@ allprojects{
 
 configure(project(":annotations")){
     tasks.withType(JavaCompile){
-        targetCompatibility = 17
-        sourceCompatibility = 17
+        targetCompatibility = 21
+        sourceCompatibility = 21
         options.fork = true
     }
 }
@@ -395,9 +394,9 @@ project(":tests"){
     }
 
     tasks.withType(JavaCompile){
-        targetCompatibility = JavaVersion.VERSION_17
-        sourceCompatibility = JavaVersion.VERSION_17
-        options.compilerArgs.addAll(['--release', '17'])
+        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_21
+        options.compilerArgs.addAll(['--release', '21'])
     }
 
     test{
