@@ -1,3 +1,5 @@
+Development is temporarily suspended, I decided to take a break. While I'm AFK, I'll do something else.
+
 # Foreground
 
 Mindustry fork. Just the way I see it.
