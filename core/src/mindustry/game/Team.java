@@ -19,14 +19,14 @@ import arc.struct.IntMap;
 import static mindustry.Vars.*;
 
 public class Team extends mindustry.ctype.Content implements Senseable {
-    public int id;
+    public final int id;
     public Color color = new Color();
     public Color[] palette = {new Color(), new Color(), new Color()};
     public int[] palettei = new int[3];
     public boolean ignoreUnitCap = false;
     public String emoji = "";
     public boolean hasPalette;
-    public String name;
+    public final String name;
     public IntMap<Relation> relations = new IntMap<>();
     public @Nullable mindustry.type.Item requiredItem = null;
 
@@ -49,7 +49,6 @@ public class Team extends mindustry.ctype.Content implements Senseable {
         crux = new Team(2, "crux", Color.valueOf("f25555"), Color.valueOf("fc8e6c"), Color.valueOf("f25555"), Color.valueOf("a04553")),
         malis = new Team(3, "malis", Color.valueOf("a27ce5"), Color.valueOf("c7a4f5"), Color.valueOf("896fd6"), Color.valueOf("504cba")),
         forerunners = new Team(4, "forerunners", Color.valueOf("0d6307"), Color.valueOf("31a02d"), Color.valueOf("0d6307"), Color.valueOf("053103")),
-
         green = new Team(5, "green", Color.valueOf("54d67d")),//Color.valueOf("96f58c"), Color.valueOf("54d67d"), Color.valueOf("28785c")),
         blue = new Team(6, "blue", Color.valueOf("6c87fd")), //Color.valueOf("85caf9"), Color.valueOf("6c87fd"), Color.valueOf("3b3392")
         neoplastic = new Team(7, "neoplastic", Color.valueOf("e05438")); //yes, it looks very similar to crux, you're not supposed to use this team for block regions anyway
@@ -74,6 +73,8 @@ public class Team extends mindustry.ctype.Content implements Senseable {
     }
 
     public Team(){
+        this.id = -1;
+        this.name = "unknown";
     }
 
     public Team(int id, String name, Color color){
