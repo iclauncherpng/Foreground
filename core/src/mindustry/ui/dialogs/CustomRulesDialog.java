@@ -178,7 +178,7 @@ public class CustomRulesDialog extends BaseDialog{
         number("@rules.blockhealthmultiplier", f -> rules.blockHealthMultiplier = f, () -> rules.blockHealthMultiplier);
         number("@rules.blockdamagemultiplier", f -> rules.blockDamageMultiplier = f, () -> rules.blockDamageMultiplier);
         check("@rules.canbuildcores", b -> rules.canBuildCores = b, () -> rules.canBuildCores);
-        slideri("@rules.maxcores", f -> rules.maxCores = f, () -> rules.maxCores, 0, 100, 1, i -> i == 0 ? "∞" : i + "", () -> rules.canBuildCores);
+        //slideri("@rules.maxcores", f -> rules.maxCores = f, () -> rules.maxCores, 0, 100, 1, i -> i == 0 ? "∞" : i + "", () -> rules.canBuildCores);
         check("@rules.protectlastcore", b -> rules.protectLastCore = b, () -> rules.protectLastCore);
 
         if(Core.bundle.get("configure").toLowerCase().contains(ruleSearch)){
@@ -325,6 +325,7 @@ public class CustomRulesDialog extends BaseDialog{
                 check("@rules.protectcores", b -> teams.protectCores = b, () -> teams.protectCores);
                 number("@rules.extracorebuildradius", f -> teams.extraCoreBuildRadius = f * tilesize, () -> Math.min(teams.extraCoreBuildRadius / tilesize, 200), () -> !rules.polygonCoreProtection && teams.protectCores);
                 check("@rules.checkplacement", b -> teams.checkPlacement = b, () -> teams.checkPlacement);
+                slideri("@rules.maxcores", f -> teams.maxCores = f, () -> teams.maxCores, 0, 100, 1, i -> i == 0 ? "∞" : i + "", () -> rules.canBuildCores);
 
                 check("@rules.infiniteresources", b -> teams.infiniteResources = b, () -> teams.infiniteResources);
                 check("@rules.fillitems", b -> teams.fillItems = b, () -> teams.fillItems);
@@ -351,6 +352,8 @@ public class CustomRulesDialog extends BaseDialog{
         category("other");
         check("@rules.experiments", b -> rules.experiments = b, () -> rules.experiments);
         check("@rules.newSpawnSystem", b -> rules.newSpawnSystem = b, () -> rules.newSpawnSystem);
+        check("@rules.sandboxUtils", b -> rules.sandboxUtils = b, () -> rules.sandboxUtils);
+        check("@rules.forсeDiplomacy", b -> rules.diplomacy = b, () -> rules.diplomacy);
 
         additionalSetup.each(Runnable::run);
 
