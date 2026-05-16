@@ -176,12 +176,13 @@ public class CoreBlock extends StorageBlock{
         ));
 
         addBar("core-limit", (CoreBuild e) -> {
+            var teamRule = state.rules.teams.get(e.team);
             Bar bar = new Bar(
-                    () -> Core.bundle.format("bar.core-limit", e.team.data().cores.size, state.rules.maxCores),
+                    () -> Core.bundle.format("bar.core-limit", e.team.data().cores.size, teamRule.maxCores),
                     () -> Color.valueOf("e08122"),
-                    () -> state.rules.maxCores <= 0 ? 0f : (float)e.team.data().cores.size / state.rules.maxCores
+                    () -> teamRule.maxCores <= 0 ? 0f : (float)e.team.data().cores.size / teamRule.maxCores
             );
-            return (state.rules.canBuildCores && state.rules.maxCores > 0) ? bar : null;
+            return (state.rules.canBuildCores && teamRule.maxCores > 0) ? bar : null;
         });
     }
 
@@ -226,10 +227,28 @@ public class CoreBlock extends StorageBlock{
     public boolean canPlaceOn(Tile tile, Team team, int rotation){
         if(tile == null) return false;
 
-        if(!state.isEditor() && state.rules.maxCores > 0){
-            if(team.cores().size >= state.rules.maxCores && !(tile.block() instanceof mindustry.world.blocks.storage.CoreBlock)){
-                return false;
+        var teamRule = state.rules.teams.get(team);
+
+        if(!state.isEditor() && state.rules.canBuildCores){
+            if(teamRule.maxCores > 0 && team.cores().size >= teamRule.maxCores){
+                if(!(tile.block() instanceof mindustry.world.blocks.storage.CoreBlock)){
+                    return false;
+                }
             }
+        }
+
+        float range = TerritorySystem.territoryBlocks.get(this, 0f);
+        if(range > 1f){
+            float side = range * 0.7071f;
+            int tileOffset = (int)(side / 8f);
+            for(int dx = -tileOffset; dx <= tileOffset; dx += Math.max(tileOffset * 2, 1)){
+                for(int dy = -tileOffset; dy <= tileOffset; dy += Math.max(tileOffset * 2, 1)){
+                    if(TerritorySystem.isEnemyTerritory(tile.x + dx, tile.y + dy, team)){
+                        return false;
+                    }
+                }
+            }
+            if(TerritorySystem.isEnemyTerritory(tile.x, tile.y, team)) return false;
         }
 
         tile.getLinkedTilesAs(this, tempTiles);
@@ -291,20 +310,23 @@ public class CoreBlock extends StorageBlock{
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid){
         if(world.tile(x, y) == null) return;
-
+        Tile tile = world.tile(x, y);
         if(!canPlaceOn(world.tile(x, y), player.team(), rotation)){
             String message;
-            if(!state.isEditor() && state.rules.canBuildCores && state.rules.maxCores > 0 &&
-                    player.team().cores().size >= state.rules.maxCores &&
-                    !(world.tile(x, y).block() instanceof CoreBlock)){
+            var teamRule = state.rules.teams.get(player.team());
+            if(!state.isEditor() && state.rules.canBuildCores && teamRule.maxCores > 0 &&
+                    player.team().cores().size >= teamRule.maxCores && !(world.tile(x, y).block() instanceof CoreBlock)){
 
                 message = Core.bundle.get("bar.maxcoresreached", "Max cores reached");
+            }
+            else if(checkTerritoryConflict(tile, player.team())){
+                message = Core.bundle.get("diplomacy.territoryconflict", "Territory Conflict");
             }
             else {
                 message = Core.bundle.get(
                         isFirstTier ? "bar.corefloor" :
                                 (player.team().core() != null && player.team().core().items.has(requirements, state.rules.buildCostMultiplier)) || state.rules.infiniteResources ?
-                                        "bar.corereq" : "bar.noresources"
+                                "bar.corereq" : "bar.noresources"
                 );
             }
             drawPlaceText(message, x, y, valid);
@@ -324,6 +346,21 @@ public class CoreBlock extends StorageBlock{
                 Draw.reset();
             }
         }
+    }
+
+    private boolean checkTerritoryConflict(Tile tile, Team team){
+        float range = TerritorySystem.territoryBlocks.get(this, 0f);
+        if(range <= 1f) return false;
+
+        float side = range * 0.7071f;
+        int tileOffset = (int)(side / 8f);
+
+        for(int dx = -tileOffset; dx <= tileOffset; dx += Math.max(tileOffset * 2, 1)){
+            for(int dy = -tileOffset; dy <= tileOffset; dy += Math.max(tileOffset * 2, 1)){
+                if(TerritorySystem.isEnemyTerritory(tile.x + dx, tile.y + dy, team)) return true;
+            }
+        }
+        return TerritorySystem.isEnemyTerritory(tile.x, tile.y, team);
     }
 
     public class CoreBuild extends Building implements LaunchAnimator{
