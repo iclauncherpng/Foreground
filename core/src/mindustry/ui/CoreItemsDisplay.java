@@ -1,5 +1,7 @@
 package mindustry.ui;
 
+import arc.Core;
+import arc.graphics.Color;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import mindustry.*;
@@ -12,6 +14,7 @@ import static mindustry.Vars.*;
 public class CoreItemsDisplay extends Table{
     private final ObjectSet<Item> usedItems = new ObjectSet<>();
     private CoreBuild core;
+    private int lastCoreCount = -1;
 
     public CoreItemsDisplay(){
         rebuild();
@@ -19,6 +22,7 @@ public class CoreItemsDisplay extends Table{
 
     public void resetUsed(){
         usedItems.clear();
+        lastCoreCount = -1;
         background(null);
     }
 
@@ -32,7 +36,18 @@ public class CoreItemsDisplay extends Table{
         update(() -> {
             core = Vars.player.team().core();
 
+            boolean needsRebuild = false;
+
             if(content.items().contains(item -> core != null && core.items.get(item) > 0 && usedItems.add(item))){
+                needsRebuild = true;
+            }
+
+            int currentCoreCount = player.team().data().cores.size;
+            if(currentCoreCount != lastCoreCount){
+                needsRebuild = true;
+            }
+
+            if(needsRebuild){
                 rebuild();
             }
         });
@@ -51,5 +66,15 @@ public class CoreItemsDisplay extends Table{
             }
         }
 
+        var teamRule = state.rules.teams.get(player.team());
+        if(state.rules.canBuildCores && teamRule.maxCores > 0){
+            if(i % 6 != 0) row();
+
+            add(new Bar(
+                    () -> Core.bundle.format("uibar.core-limit", player.team().data().cores.size, teamRule.maxCores),
+                    () -> Color.valueOf("e08122"),
+                    () -> teamRule.maxCores <= 0 ? 0f : (float)player.team().data().cores.size / teamRule.maxCores
+            )).colspan(6).growX().fillX().height(18f).pad(2).center();
+        }
     }
 }
