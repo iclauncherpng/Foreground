@@ -10,6 +10,9 @@ import arc.input.KeyCode.*;
 import arc.math.*;
 import arc.math.geom.*;
 import arc.scene.*;
+import arc.scene.ui.ImageButton;
+import arc.scene.ui.Label;
+import arc.scene.ui.Tooltip;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.*;
@@ -118,6 +121,48 @@ public class DesktopInput extends InputHandler{
                 });
             }).margin(6f);
         });
+
+        boolean[] visible = {true};
+
+        group.update(() -> {
+            if(arc.Core.input.keyTap(arc.input.KeyCode.tab)){
+                visible[0] = !visible[0];
+            }
+        });
+
+        group.fill(t -> {
+            t.visible(() -> state.rules.sandboxUtils && visible[0]);
+            t.left().bottom().marginBottom(200f).marginLeft(10f);
+
+            t.table(Styles.black6, b -> {
+                b.defaults().size(40f).margin(4f);
+
+                for(Team team : Team.baseTeams){
+                    arc.graphics.g2d.TextureRegion region = arc.Core.atlas.find("team-" + team.name, arc.Core.atlas.find("router"));
+                    ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle(){{
+                        up = Styles.none;
+                        down = Styles.none;
+                        over = Styles.none;
+                        imageUpColor = team.color;
+                        imageDownColor = team.color;
+                        imageOverColor = team.color.cpy().lerp(arc.graphics.Color.white, 0.3f);
+                    }};
+                    ImageButton btn = new ImageButton(region, style);
+                    btn.clicked(() -> {
+                        player.team(team);
+                        Call.setPlayerTeamEditor(player, team);
+                    });
+                    btn.addListener(new Tooltip(tp -> {
+                        tp.background(Styles.black6);
+                        Label l = new Label(() -> team.name);
+                        l.setColor(team.color);
+                        tp.add(l);
+                    }));
+                    b.add(btn);
+                    if(team.id % 3 == 2) b.row();
+                }
+            }).margin(8f);
+        });
     }
 
     @Override
@@ -222,7 +267,6 @@ public class DesktopInput extends InputHandler{
                 drawOverlapCheck(block, cursorX, cursorY, valid);
             }
         }
-
         Draw.reset();
     }
 

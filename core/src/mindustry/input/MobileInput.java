@@ -1,6 +1,7 @@
 package mindustry.input;
 
 import arc.*;
+import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.input.GestureDetector.*;
 import arc.input.*;
@@ -24,6 +25,9 @@ import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.*;
 import mindustry.world.blocks.*;
+import arc.scene.ui.ImageButton;
+import arc.scene.ui.Label;
+import arc.scene.ui.Tooltip;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
@@ -350,6 +354,53 @@ public class MobileInput extends InputHandler implements GestureListener{
                 });
 
             }).margin(4f);
+        });
+
+        boolean[] showTeams = {false};
+
+        group.fill(t -> {
+            t.visible(() -> state.rules.sandboxUtils && showTeams[0]);
+            t.left().bottom().marginBottom(200f).marginLeft(10f);
+
+            t.table(Styles.black6, b -> {
+                b.defaults().size(42f).margin(4f);
+
+                for(Team team : Team.baseTeams){
+                    TextureRegion region = Core.atlas.find("team-" + team.name, Core.atlas.find("router"));
+
+                    ImageButton btn = new ImageButton(region, new ImageButtonStyle(){{
+                        up = Styles.none;
+                        down = Styles.none;
+                        over = Styles.none;
+                        imageUpColor = team.color;
+                        imageDownColor = team.color;
+                        imageOverColor = team.color.cpy().lerp(Color.white, 0.3f);
+                    }});
+
+                    btn.clicked(() -> {
+                        player.team(team);
+                        Call.setPlayerTeamEditor(player, team);
+                    });
+
+                    btn.addListener(new Tooltip(tp -> {
+                        tp.background(Styles.black6);
+                        tp.add(new Label(() -> team.name)).color(team.color);
+                    }));
+
+                    b.add(btn);
+                    if(team.id % 3 == 2) b.row();
+                }
+            }).margin(8f);
+        });
+
+        group.fill(t -> {
+            t.visible(() -> state.rules.sandboxUtils);
+            t.left().bottom().marginBottom(150f).marginLeft(10f);
+
+            
+            t.button(Icon.settings, Styles.clearNonei, () -> {
+                showTeams[0] = !showTeams[0];
+            });
         });
     }
 
