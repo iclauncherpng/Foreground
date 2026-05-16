@@ -210,7 +210,6 @@ public class Rules{
     public boolean limitMapArea = false;
     /** If enabled, allows breaking and building cores */
     public boolean canBuildCores = false;
-    public int maxCores = 0;
     public boolean protectLastCore = true;
     /** Map area limit rectangle. */
     public int limitX, limitY, limitWidth = 1, limitHeight = 1;
@@ -239,6 +238,8 @@ public class Rules{
 
     public boolean experiments = false;
     public boolean newSpawnSystem = false;
+
+    public boolean sandboxUtils = false;
 
     /** Copies this ruleset exactly. Not efficient at all, do not use often. */
     public Rules copy(){
@@ -328,6 +329,7 @@ public class Rules{
         public boolean cheat;
         /** If true, the core is always filled to capacity with all items. */
         public boolean fillItems;
+        public int maxCores = 0;
         /** If true, resources are not consumed when building. */
         public boolean infiniteResources;
         /** If true, this team has infinite unit ammo. */
