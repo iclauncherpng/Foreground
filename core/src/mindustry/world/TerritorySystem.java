@@ -6,6 +6,7 @@ import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.util.*;
 import arc.struct.*;
+import mindustry.Vars;
 import mindustry.game.EventType.*;
 import mindustry.game.*;
 import mindustry.gen.*;
@@ -20,18 +21,23 @@ public class TerritorySystem {
     public static boolean initialized = false;
     private static Bits drawn = new Bits();
     public static TerritoryRenderer renderer = new TerritoryRenderer();
-    public static byte[][] territoryMap;
+    public static final int CHUNK_SIZE = 16;
+    public static byte[][] territoryChunks;
+    public static int chunksX, chunksY;
 
     public static void load() {
         Core.settings.defaults("territoryopacity", 15);
         Events.on(WorldLoadEvent.class, event -> {
-            territoryMap = new byte[world.width()][world.height()];
+            chunksX = Mathf.ceil((float) world.width() / CHUNK_SIZE);
+            chunksY = Mathf.ceil((float) world.height() / CHUNK_SIZE);
+            territoryChunks = new byte[chunksX][chunksY];
+
             if(state.rules.diplomacy){
                 state.rules.polygonCoreProtection = false;
                 state.rules.enemyCoreBuildRadius = 0f;
                 state.rules.placeRangeCheck = false;
             }
-            renderer.setDirty();
+            invalidateTerritory();
         });
 
         Events.on(ContentInitEvent.class, event -> {
@@ -50,18 +56,19 @@ public class TerritorySystem {
 
         Events.on(BlockBuildEndEvent.class, e -> {
             if(e.tile.build != null && territoryBlocks.containsKey(e.tile.block())){
-                renderer.setDirty();
+                invalidateTerritory();
             }
         });
 
         Events.on(TileChangeEvent.class, e -> {
-            renderer.setDirty();
+            invalidateTerritory();
         });
 
         Events.run(Trigger.draw, () -> {
             if (state.isMenu() || !state.rules.diplomacy || !initialized || !Core.settings.getBool("territoryrender", !mobile)) return;
 
             Draw.z(Layer.territory);
+            if(Vars.devMode) drawDebugChunks();
 
             if (renderer.isDirty()) {
                 renderer.clearZones();
@@ -114,7 +121,83 @@ public class TerritorySystem {
 
             renderer.render();
         });
-
-
     }
+    private static void invalidateTerritory() {
+        renderer.setDirty();
+        updateChunks();
+    }
+    private static void updateChunks() {
+        if (territoryChunks == null || !initialized) return;
+
+        for (int x = 0; x < chunksX; x++) {
+            for (int y = 0; y < chunksY; y++) {
+                territoryChunks[x][y] = 0;
+            }
+        }
+
+        for (Teams.TeamData data : state.teams.present) {
+            if (data.team == Team.derelict || data.buildings.isEmpty()) continue;
+
+            byte teamId = (byte) data.team.id;
+
+            data.buildings.each(b -> territoryBlocks.containsKey(b.block), b -> {
+                float radius = territoryBlocks.get(b.block, 0f);
+                float side = radius * 0.7071f;
+                int tileSide = (int)(side / 8f);
+
+                int centerX = b.tileX();
+                int centerY = b.tileY();
+
+                int minChunkX = Math.max(0, (centerX - tileSide) / CHUNK_SIZE);
+                int maxChunkX = Math.min(chunksX - 1, (centerX + tileSide) / CHUNK_SIZE);
+                int minChunkY = Math.max(0, (centerY - tileSide) / CHUNK_SIZE);
+                int maxChunkY = Math.min(chunksY - 1, (centerY + tileSide) / CHUNK_SIZE);
+
+                for (int cx = minChunkX; cx <= maxChunkX; cx++) {
+                    for (int cy = minChunkY; cy <= maxChunkY; cy++) {
+                        territoryChunks[cx][cy] = teamId;
+                    }
+                }
+            });
+        }
+    }
+
+    public static boolean isEnemyTerritory(int tileX, int tileY, Team team) {
+        if (!state.rules.diplomacy || territoryChunks == null) return false;
+        if (tileX < 0 || tileY < 0 || tileX >= world.width() || tileY >= world.height()) return false;
+
+        int cx = tileX / CHUNK_SIZE;
+        int cy = tileY / CHUNK_SIZE;
+
+        if (cx >= chunksX || cy >= chunksY) return false;
+
+        byte teamId = territoryChunks[cx][cy];
+        return teamId != 0 && teamId != team.id && teamId != Team.derelict.id;
+    }
+
+    public static void drawDebugChunks() {
+        if (state.isMenu() || territoryChunks == null || !initialized) return;
+
+        Draw.z(Layer.max);
+        float chunkSizeWorld = CHUNK_SIZE * 8f;
+
+        for (int cx = 0; cx < chunksX; cx++) {
+            for (int cy = 0; cy < chunksY; cy++) {
+                byte teamId = territoryChunks[cx][cy];
+                float worldX = cx * chunkSizeWorld + chunkSizeWorld / 2f;
+                float worldY = cy * chunkSizeWorld + chunkSizeWorld / 2f;
+
+                Draw.color(Color.white, 0.3f);
+                Lines.stroke(1f);
+                Lines.rect(worldX - chunkSizeWorld / 2f, worldY - chunkSizeWorld / 2f, chunkSizeWorld, chunkSizeWorld);
+
+                if (teamId != 0) {
+                    Draw.color(Team.get(teamId).color, 0.7f);
+                    Fill.crect(worldX - 6f, worldY - 6f, 12f, 12f);
+                }
+            }
+        }
+        Draw.reset();
+    }
+
 }
