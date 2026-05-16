@@ -383,6 +383,7 @@ public class SettingsMenuDialog extends BaseDialog{
         });
 
         game.checkPref("console", false);
+        game.checkPref("debug", false);
 
 
         int[] lastUiScale = {settings.getInt("uiscale", 100)};

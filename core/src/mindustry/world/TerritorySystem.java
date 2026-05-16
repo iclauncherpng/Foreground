@@ -68,7 +68,7 @@ public class TerritorySystem {
             if (state.isMenu() || !state.rules.diplomacy || !initialized || !Core.settings.getBool("territoryrender", !mobile)) return;
 
             Draw.z(Layer.territory);
-            if(Vars.devMode) drawDebugChunks();
+            if(Core.settings.getBool("debug", false)) drawDebugChunks();
 
             if (renderer.isDirty()) {
                 renderer.clearZones();
