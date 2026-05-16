@@ -1,5 +1,6 @@
 package mindustry.world.blocks.diplomacy;
 
+import arc.Core;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
@@ -46,6 +47,23 @@ public class TowerBlock extends Wall {
             consume(new ConsumeItemFilter(i -> i == Items.silicon));
         }
         super.init();
+    }
+
+    @Override
+    public boolean canPlaceOn(Tile tile, Team team, int rotation) {
+        if(!super.canPlaceOn(tile, team, rotation)) return false;
+        float range = TerritorySystem.territoryBlocks.get(this, 0f);
+        if(range <= 1f) return true;
+        float side = range * 0.7071f;
+        int tileOffset = (int)(side / 8f);
+        for(int dx = -tileOffset; dx <= tileOffset; dx += Math.max(tileOffset * 2, 1)){
+            for(int dy = -tileOffset; dy <= tileOffset; dy += Math.max(tileOffset * 2, 1)){
+                if(TerritorySystem.isEnemyTerritory(tile.x + dx, tile.y + dy, team)){
+                    return false;
+                }
+            }
+        }
+        return !TerritorySystem.isEnemyTerritory(tile.x, tile.y, team);
     }
 
     public class TowerBuild extends WallBuild {
@@ -200,18 +218,48 @@ public class TowerBlock extends Wall {
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid) {
         super.drawPlace(x, y, rotation, valid);
+        Tile tile = world.tile(x, y);
+        if(tile == null) return;
+        if(!canPlaceOn(tile, player.team(), rotation)){
+            String message;
+            if(checkTerritoryConflict(tile, player.team())){
+                message = Core.bundle.get("diplomacy.territoryconflict", "Territory Conflict");
+            } else {
+                message = Core.bundle.get("bar.invalid");
+            }
+
+            drawPlaceText(message, x, y, valid);
+        }
         float range = TerritorySystem.territoryBlocks.get(this, 0f);
         if (range > 1f) {
             float side = range * 0.7071f;
             float centerX = x * 8f + offset;
             float centerY = y * 8f + offset;
-            Draw.color(Vars.player.team().color);
+            if(checkTerritoryConflict(tile, player.team())){
+                Draw.color(Vars.player.team().color);
+            } else {
+                Draw.color(Vars.player.team().color);
+            }
+
             Lines.stroke(1.5f);
-            if(!valid) Draw.color(Pal.remove);
             Lines.rect(centerX - side, centerY - side, side * 2, side * 2);
             Draw.alpha(0.05f);
             Fill.rect(centerX, centerY, side * 2, side * 2);
             Draw.reset();
         }
+    }
+    private boolean checkTerritoryConflict(Tile tile, Team team){
+        float range = TerritorySystem.territoryBlocks.get(this, 0f);
+        if(range <= 1f) return false;
+
+        float side = range * 0.7071f;
+        int tileOffset = (int)(side / 8f);
+
+        for(int dx = -tileOffset; dx <= tileOffset; dx += Math.max(tileOffset * 2, 1)){
+            for(int dy = -tileOffset; dy <= tileOffset; dy += Math.max(tileOffset * 2, 1)){
+                if(TerritorySystem.isEnemyTerritory(tile.x + dx, tile.y + dy, team)) return true;
+            }
+        }
+        return TerritorySystem.isEnemyTerritory(tile.x, tile.y, team);
     }
 }
