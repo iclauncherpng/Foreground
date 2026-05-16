@@ -121,14 +121,19 @@ public class MenuFragment{
                 fy -= Scl.scl(macNotchHeight);
             }
 
-            if(Version.modifier.contains("canary")){
-                Fonts.outline.setColor(Pal.accent);
-                Fonts.outline.draw("[red]⚠ Unstable Indev Build ⚠", fx, fy - logoh/2f - Scl.scl(22f), Align.center);
-            }
+            if(Version.modifier.contains("canary") || !Version.sign.isEmpty()){
+                float yOffset = fy - logoh/2f - Scl.scl(22f);
 
-            if(!Version.sign.isEmpty()){
-                Fonts.outline.setColor(Pal.accent);
-                Fonts.outline.draw("[green]⚠ IBS" + Version.signString() + " ⚠", fx, fy - logoh/2f - Scl.scl(22f), Align.center);
+                if(Version.modifier.contains("canary")){
+                    Fonts.outline.setColor(Pal.accent);
+                    Fonts.outline.draw("[red]⚠ Unstable Indev Build ⚠", fx, yOffset, Align.center);
+                    yOffset -= Scl.scl(22f);
+                }
+
+                if(!Version.sign.isEmpty()){
+                    Fonts.outline.setColor(Pal.accent);
+                    Fonts.outline.draw("[green]⚠ IBS" + Version.signString() + " ⚠", fx, yOffset, Align.center);
+                }
             }
 
             Draw.color();
