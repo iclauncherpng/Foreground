@@ -595,9 +595,11 @@ public class Block extends UnlockableContent implements Senseable{
     public final boolean checkPlacementFull(Tile tile, Team team, int rotation){
         if(tile == null || Groups.build == null || world.tile(tile.x, tile.y) == null) return true;
         if(!state.rules.diplomacy || devMode) return true;
+
         boolean inAnyZone = false;
         boolean inOwnZone = false;
         float margin = (this instanceof TowerBlock) ? 96f : 0f;
+
         for(Building b : Groups.build){
             if(TerritorySystem.territoryBlocks.containsKey(b.block)){
                 float radius = TerritorySystem.territoryBlocks.get(b.block, 0f);
@@ -614,7 +616,16 @@ public class Block extends UnlockableContent implements Senseable{
                 }
             }
         }
-        if(!inOwnZone && !inAnyZone && !(this instanceof TradeConveyor) && !(this instanceof TradeConduit)) return false;
+
+        if(!inOwnZone && !inAnyZone){
+            tile.getLinkedTilesAs(this, tempTiles);
+            boolean isOnCoreZone = !tempTiles.contains(o -> o.floor() != mindustry.content.Blocks.coreZone);
+            boolean isCoreBlock = this instanceof mindustry.world.blocks.storage.CoreBlock;
+            if(isCoreBlock && isOnCoreZone){
+                return canPlaceOn(tile, team, rotation);
+            }
+            if(!(this instanceof TradeConveyor) && !(this instanceof TradeConduit)) return false;
+        }
         return canPlaceOn(tile, team, rotation);
     }
 

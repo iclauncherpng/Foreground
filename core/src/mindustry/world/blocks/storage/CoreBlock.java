@@ -90,6 +90,15 @@ public class CoreBlock extends StorageBlock{
         replaceable = false;
         destroySound = Sounds.explosionCore;
         destroySoundVolume = 1.6f;
+
+        configurable = false;
+
+        config(Integer.class, (CoreBuild build, Integer teamId) -> {
+            Team target = Team.get(teamId);
+            if(target != null){
+                build.changeTeam(target);
+            }
+        });
     }
 
     @Remote(called = Loc.server)
@@ -236,6 +245,10 @@ public class CoreBlock extends StorageBlock{
                 }
             }
         }
+        tile.getLinkedTilesAs(this, tempTiles);
+
+        boolean isOnCoreZone = !tempTiles.contains(o -> o.floor() != mindustry.content.Blocks.coreZone);
+        boolean isCoreBlock = this instanceof mindustry.world.blocks.storage.CoreBlock;
 
         float range = TerritorySystem.territoryBlocks.get(this, 0f);
         if(range > 1f){
@@ -249,10 +262,20 @@ public class CoreBlock extends StorageBlock{
                 }
             }
             if(TerritorySystem.isEnemyTerritory(tile.x, tile.y, team)) return false;
+            if(TerritorySystem.territoryMap != null && tile.x >= 0 && tile.y >= 0 && tile.x < world.width() && tile.y < world.height()){
+                byte currentTeamId = TerritorySystem.territoryMap[tile.x][tile.y];
+                boolean isOwnTerritory = (currentTeamId == team.id);
+                if(!isOwnTerritory){
+                    if(isCoreBlock && isOnCoreZone){
+                        CoreBuild core = team.core();
+                        if(state.isEditor() || state.rules.infiniteResources || (core != null && core.items.has(requirements, state.rules.buildCostMultiplier))){
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
         }
-
-        tile.getLinkedTilesAs(this, tempTiles);
-
         if(!tempTiles.contains(o -> !o.floor().allowCorePlacement)){
             CoreBuild core = team.core();
             if(state.isEditor() || state.rules.infiniteResources || (core != null && core.items.has(requirements, state.rules.buildCostMultiplier))){
@@ -418,6 +441,31 @@ public class CoreBlock extends StorageBlock{
                     Draw.reset();
                 });
             }
+        }
+
+        @Override
+        public void buildConfiguration(Table table) {
+            if (!state.rules.diplomacy) return;
+
+            table.table(Styles.black6, t -> {
+                t.margin(8f).add("[accent]Передать ядро:[]").padBottom(6f).row();
+                t.pane(p -> {
+                    int count = 0;
+                    for (Team other : Team.all) {
+                        if (other != null && other.active() && other != team && other != Team.derelict) {
+
+                            var cell = p.button(other.localized(), Styles.flatToggleMenut, () -> {
+                                Call.tileConfig(player, this, other.id);
+                                control.input.config.hideConfig();
+                            });
+
+                            cell.size(140f, 40f).pad(4f).color(other.color);
+
+                            if (++count % 2 == 0) p.row();
+                        }
+                    }
+                }).maxHeight(200f);
+            }).padLeft(120f);
         }
 
         @Override
