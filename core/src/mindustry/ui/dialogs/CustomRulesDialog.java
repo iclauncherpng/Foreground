@@ -353,7 +353,7 @@ public class CustomRulesDialog extends BaseDialog{
         check("@rules.experiments", b -> rules.experiments = b, () -> rules.experiments);
         check("@rules.newSpawnSystem", b -> rules.newSpawnSystem = b, () -> rules.newSpawnSystem);
         check("@rules.sandboxUtils", b -> rules.sandboxUtils = b, () -> rules.sandboxUtils);
-        check("@rules.forсeDiplomacy", b -> rules.diplomacy = b, () -> rules.diplomacy);
+        check("@rules.forceDiplomacy", b -> rules.diplomacy = b, () -> rules.diplomacy);
 
         additionalSetup.each(Runnable::run);
 
