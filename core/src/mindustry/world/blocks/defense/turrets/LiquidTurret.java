@@ -3,6 +3,7 @@ package mindustry.world.blocks.defense.turrets;
 import arc.struct.*;
 import mindustry.content.*;
 import mindustry.core.*;
+import mindustry.ctype.*;
 import mindustry.entities.*;
 import mindustry.entities.bullet.*;
 import mindustry.gen.*;
@@ -36,7 +37,7 @@ public class LiquidTurret extends Turret{
     public void setStats(){
         super.setStats();
 
-        stats.add(Stat.ammo, StatValues.ammo(ammoTypes));
+        stats.add(Stat.ammo, StatValues.ammo(ammoTypes, name));
     }
 
     @Override
@@ -66,13 +67,6 @@ public class LiquidTurret extends Turret{
         @Override
         public boolean shouldActiveSound(){
             return wasShooting && enabled;
-        }
-
-        @Override
-        public void updateTile(){
-            unit.ammo(unit.type().ammoCapacity * liquids.currentAmount() / liquidCapacity);
-
-            super.updateTile();
         }
 
         @Override
@@ -139,8 +133,8 @@ public class LiquidTurret extends Turret{
         @Override
         public boolean acceptLiquid(Building source, Liquid liquid){
             return ammoTypes.get(liquid) != null &&
-                (liquids.current() == liquid ||
-                ((!ammoTypes.containsKey(liquids.current()) || liquids.get(liquids.current()) <= 1f / ammoTypes.get(liquids.current()).ammoMultiplier + 0.001f)));
+                    (liquids.current() == liquid ||
+                            ((!ammoTypes.containsKey(liquids.current()) || liquids.get(liquids.current()) <= 1f / ammoTypes.get(liquids.current()).ammoMultiplier + 0.001f)));
         }
     }
 }

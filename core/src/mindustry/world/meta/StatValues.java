@@ -33,9 +33,6 @@ import static mindustry.Vars.*;
 /** Utilities for displaying certain stats in a table. */
 public class StatValues{
 
-    //only allocate once, dont break unit tests
-    static @Nullable TextureRegionDrawable noteIcon = Icon.arrowNoteSmall != null ? new TextureRegionDrawable(Icon.arrowNoteSmall) : null;
-
     public static StatValue string(String value, Object... args){
         String result = Strings.format(value, args);
         return table -> table.add(result);
@@ -316,8 +313,8 @@ public class StatValues{
 
     public static StatValue blockEfficiency(Block floor, float multiplier, boolean startZero){
         return table -> table.stack(
-            new Image(floor.uiIcon).setScaling(Scaling.fit),
-            new Table(t -> t.top().right().add((multiplier < 0 ? "[scarlet]" : startZero ? "[accent]" : "[accent]+") + (int)((multiplier) * 100) + "%").style(Styles.outlineLabel))
+                new Image(floor.uiIcon).setScaling(Scaling.fit),
+                new Table(t -> t.top().right().add((multiplier < 0 ? "[scarlet]" : startZero ? "[accent]" : "[accent]+") + (int)((multiplier) * 100) + "%").style(Styles.outlineLabel))
         ).maxSize(64f);
     }
 
@@ -336,8 +333,8 @@ public class StatValues{
 
                 if(state.isGame()){
                     var blocks = Vars.content.blocks()
-                    .select(block -> (!checkFloors || block instanceof Floor) && indexer.isBlockPresent(block) && block.attributes.get(attr) != 0 && !((block instanceof Floor f && f.isDeep()) && !floating))
-                    .with(s -> s.sort(f -> f.attributes.get(attr)));
+                            .select(block -> (!checkFloors || block instanceof Floor) && indexer.isBlockPresent(block) && block.attributes.get(attr) != 0 && !((block instanceof Floor f && f.isDeep()) && !floating))
+                            .with(s -> s.sort(f -> f.attributes.get(attr)));
 
                     if(blocks.any()){
                         int i = 0;
@@ -430,7 +427,7 @@ public class StatValues{
                         }).grow();
                         if(multipliers != null){
                             b.add(Strings.autoFixed(60f / (Math.max(drillTime + drillMultiplier * block.itemDrop.hardness, drillTime) / multipliers.get(block.itemDrop, 1f)) * size, 2) + StatUnit.perSecond.localized())
-                            .right().pad(10f).padRight(15f).color(Color.lightGray);
+                                    .right().pad(10f).padRight(15f).color(Color.lightGray);
                         }
                     }).growX().pad(5);
                     if(++i % 2 == 0) c.row();
@@ -603,14 +600,26 @@ public class StatValues{
     }
 
     public static <T extends UnlockableContent> StatValue ammo(ObjectMap<T, BulletType> map){
-        return ammo(map, false, false);
+        return ammo(map, false, false, null);
     }
 
     public static <T extends UnlockableContent> StatValue ammo(ObjectMap<T, BulletType> map, boolean showUnit){
-        return ammo(map, false, showUnit);
+        return ammo(map, false, showUnit, null);
+    }
+
+    public static <T extends UnlockableContent> StatValue ammo(ObjectMap<T, BulletType> map, String blockName){
+        return ammo(map, false, false, blockName);
+    }
+
+    public static <T extends UnlockableContent> StatValue ammo(ObjectMap<T, BulletType> map, boolean showUnit, String blockName){
+        return ammo(map, false, showUnit, blockName);
     }
 
     public static <T extends UnlockableContent> StatValue ammo(ObjectMap<T, BulletType> map, boolean nested, boolean showUnit){
+        return ammo(map, nested, showUnit, null);
+    }
+
+    public static <T extends UnlockableContent> StatValue ammo(ObjectMap<T, BulletType> map, boolean nested, boolean showUnit, @Nullable String blockName){
         return table -> {
 
             table.row();
@@ -624,7 +633,7 @@ public class StatValues{
                 BulletType type = map.get(t);
 
                 if(type.spawnUnit != null && type.spawnUnit.weapons.size > 0){
-                    ammo(ObjectMap.of(t, type.spawnUnit.weapons.first().bullet), nested, false).display(table);
+                    ammo(ObjectMap.of(t, type.spawnUnit.weapons.first().bullet), nested, false, blockName).display(table);
                     continue;
                 }
 
@@ -644,9 +653,24 @@ public class StatValues{
                         bt.row();
                     }
 
+                    if(blockName != null && t instanceof UnlockableContent){
+                        UnlockableContent content = (UnlockableContent) t;
+                        String key = "block." + blockName + "." + content.name + ".info";
+                        if(Core.bundle.has(key)){
+                            bt.table(desc -> {
+                                desc.image(Icon.info.getRegion()).size(20).color(Color.lightGray).scaling(Scaling.fit).padRight(8).padLeft(12);
+                                desc.add("[lightgray]" + Core.bundle.get(key));
+                            });
+
+                            bt.row();
+                            bt.add().height(10f);
+                            bt.row();
+                        }
+                    }
+
                     if(type.damage > 0 && (type.collides || type.splashDamage <= 0)){
-                        bt.add(Core.bundle.format("bullet.damage", type.damage) + (type.continuousDamage() > 0 ? 
-                        "[lightgray] ~ [stat]" + Core.bundle.format("bullet.damage", type.continuousDamage()) + StatUnit.perSecond.localized() : ""));
+                        bt.add(Core.bundle.format("bullet.damage", type.damage) + (type.continuousDamage() > 0 ?
+                                "[lightgray] ~ [stat]" + Core.bundle.format("bullet.damage", type.continuousDamage()) + StatUnit.perSecond.localized() : ""));
                     }
 
                     if(type.buildingDamageMultiplier != 1){
@@ -713,19 +737,19 @@ public class StatValues{
                         sep(bt, Core.bundle.format("bullet.empradius", Strings.fixed(b.radius / tilesize, 1)));
                         if(b.timeDuration > 0f && b.timeIncrease > 1f){
                             sep(bt, Core.bundle.format("bullet.empboost", Strings.autoFixed(b.timeIncrease * 100f, 2),
-                            Strings.autoFixed(b.timeDuration / 60f, 1)) + " " + StatUnit.seconds.localized());
+                                    Strings.autoFixed(b.timeDuration / 60f, 1)) + " " + StatUnit.seconds.localized());
                         }
                         if(b.timeDuration > 0f && b.powerSclDecrease < 1f){
-                            sep(bt, Core.bundle.format("bullet.empslowdown", 
-                            (b.powerSclDecrease < 1f ? "[negstat]" : "") + Strings.autoFixed((b.powerSclDecrease - 1f) * 100f, 2),
-                            Strings.autoFixed(b.timeDuration / 60f, 1)) + " " + StatUnit.seconds.localized());
+                            sep(bt, Core.bundle.format("bullet.empslowdown",
+                                    (b.powerSclDecrease < 1f ? "[negstat]" : "") + Strings.autoFixed((b.powerSclDecrease - 1f) * 100f, 2),
+                                    Strings.autoFixed(b.timeDuration / 60f, 1)) + " " + StatUnit.seconds.localized());
                         }
                         if(!Mathf.equal(b.powerDamageScl, 1f)){
                             sep(bt, Core.bundle.format("bullet.empdamage", Strings.autoFixed(b.powerDamageScl * 100f, 2)));
                         }
                         if(b.hitUnits){
                             sep(bt, Core.bundle.format("bullet.empunitdamage",
-                            (b.unitDamageScl < 1f ? "[negstat]" : "") + Strings.autoFixed(b.unitDamageScl * 100f, 2)));
+                                    (b.unitDamageScl < 1f ? "[negstat]" : "") + Strings.autoFixed(b.unitDamageScl * 100f, 2)));
                         }
                     }
 
@@ -733,13 +757,15 @@ public class StatValues{
                         sep(bt, "@bullet.armorpierce");
                     }
 
-                    if(type.armorMultiplier != 1f){
-                        if(type.armorMultiplier > 1f){
-                            sep(bt, Core.bundle.format("bullet.armorweakness", (int)(type.armorMultiplier * 100)));
-                        }else if(Mathf.sign(type.armorMultiplier) == 1){
-                            sep(bt, Core.bundle.format("bullet.armorpiercing", (int)((1 - type.armorMultiplier) * 100)));
-                        }else{
-                            sep(bt, Core.bundle.format("bullet.antiarmor", (-type.armorMultiplier)));
+                    if(!type.pierceArmor){
+                        if(type.armorMultiplier != 1f){
+                            if(type.armorMultiplier > 1f){
+                                sep(bt, Core.bundle.format("bullet.armorweakness", (type.armorMultiplier)));
+                            }else if(Mathf.sign(type.armorMultiplier) == 1){
+                                sep(bt, Core.bundle.format("bullet.partialarmorpierce", (int)((1 - type.armorMultiplier) * 100)));
+                            }else{
+                                sep(bt, Core.bundle.format("bullet.antiarmor", (-type.armorMultiplier)));
+                            }
                         }
                     }
 
@@ -753,7 +779,7 @@ public class StatValues{
 
                     if(type.status != StatusEffects.none){
                         sep(bt, (type.status.hasEmoji() ? type.status.emoji() : "") + "[stat]" + type.status.localizedName + (type.status.reactive ? "" : "[lightgray] ~ [stat]" +
-                            Strings.autoFixed(type.statusDuration / 60f, 1) + "[lightgray] " + Core.bundle.get("unit.seconds"))).with(c -> withTooltip(c, type.status));
+                                Strings.autoFixed(type.statusDuration / 60f, 1) + "[lightgray] " + Core.bundle.get("unit.seconds"))).with(c -> withTooltip(c, type.status));
                     }
 
                     if(!type.targetMissiles){
@@ -836,11 +862,7 @@ public class StatValues{
     private static Cell<?> note(Table table, String text){
         table.row();
         return table.table(t -> {
-            if(noteIcon != null){
-                noteIcon.setMinWidth(15f);
-                noteIcon.setMinHeight(15f);
-                t.image(noteIcon).color(Pal.stat).scaling(Scaling.fit).padRight(6).padLeft(12);
-            }
+            t.image(Icon.arrowNoteSmall.getRegion()).size(15).color(Pal.stat).scaling(Scaling.fit).padRight(6).padLeft(12);
             t.add(text);
         });
     }

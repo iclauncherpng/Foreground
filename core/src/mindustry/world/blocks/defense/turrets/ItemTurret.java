@@ -7,6 +7,7 @@ import arc.struct.*;
 import arc.util.io.*;
 import mindustry.*;
 import mindustry.content.*;
+import mindustry.ctype.*;
 import mindustry.entities.bullet.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
@@ -49,7 +50,7 @@ public class ItemTurret extends Turret{
         super.setStats();
 
         stats.remove(Stat.itemCapacity);
-        stats.add(Stat.ammo, StatValues.ammo(ammoTypes));
+        stats.add(Stat.ammo, StatValues.ammo(ammoTypes, name));
         stats.add(Stat.ammoCapacity, maxAmmo / ammoPerShot, StatUnit.shots);
     }
 
@@ -58,11 +59,11 @@ public class ItemTurret extends Turret{
         super.setBars();
 
         addBar("ammo", (ItemTurretBuild entity) ->
-            new Bar(
-                "stat.ammo",
-                Pal.ammo,
-                () -> (float)entity.totalAmmo / maxAmmo
-            )
+                new Bar(
+                        "stat.ammo",
+                        Pal.ammo,
+                        () -> (float)entity.totalAmmo / maxAmmo
+                )
         );
     }
 
@@ -73,8 +74,8 @@ public class ItemTurret extends Turret{
             public void build(Building build, Table table){
                 MultiReqImage image = new MultiReqImage();
                 content.items().each(i -> filter.get(i) && i.unlockedNow(),
-                item -> image.add(new ReqImage(new Image(item.uiIcon),
-                () -> build instanceof ItemTurretBuild it && !it.ammo.isEmpty() && ((ItemEntry)it.ammo.peek()).item == item)));
+                        item -> image.add(new ReqImage(new Image(item.uiIcon),
+                                () -> build instanceof ItemTurretBuild it && !it.ammo.isEmpty() && ((ItemEntry)it.ammo.peek()).item == item)));
 
                 table.add(image).size(8 * 4);
             }
@@ -116,13 +117,6 @@ public class ItemTurret extends Turret{
                 case currentAmmoType -> ammo.size > 0 ? ((ItemEntry)ammo.peek()).item : null;
                 default -> super.senseObject(sensor);
             };
-        }
-
-        @Override
-        public void updateTile(){
-            unit.ammo((float)unit.type().ammoCapacity * totalAmmo / maxAmmo);
-
-            super.updateTile();
         }
 
         @Override
@@ -235,9 +229,9 @@ public class ItemTurret extends Turret{
         @Override
         public String toString(){
             return "ItemEntry{" +
-            "item=" + item +
-            ", amount=" + amount +
-            '}';
+                    "item=" + item +
+                    ", amount=" + amount +
+                    '}';
         }
     }
 }
