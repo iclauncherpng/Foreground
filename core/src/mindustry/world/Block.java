@@ -29,9 +29,7 @@ import mindustry.mod.*;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.blocks.*;
-import mindustry.world.blocks.diplomacy.TowerBlock;
-import mindustry.world.blocks.diplomacy.TradeConduit;
-import mindustry.world.blocks.diplomacy.TradeConveyor;
+import mindustry.world.blocks.diplomacy.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.consumers.*;
@@ -624,7 +622,7 @@ public class Block extends UnlockableContent implements Senseable{
             if(isCoreBlock && isOnCoreZone){
                 return canPlaceOn(tile, team, rotation);
             }
-            if(!(this instanceof TradeConveyor) && !(this instanceof TradeConduit)) return false;
+            if(!(this instanceof TradeConveyor) && !(this instanceof TradeConduit) && !(this instanceof TradeBridge) && !(this instanceof tradePowerNode)) return false;
         }
         return canPlaceOn(tile, team, rotation);
     }
