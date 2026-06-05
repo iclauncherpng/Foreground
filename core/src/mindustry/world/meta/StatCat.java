@@ -15,7 +15,8 @@ public class StatCat implements Comparable<StatCat>{
     items = new StatCat("items"),
     crafting = new StatCat("crafting"),
     function = new StatCat("function"),
-    optional = new StatCat("optional");
+    optional = new StatCat("optional"),
+    diplomacyRebalance = new StatCat("diplomacy-rebalance");
 
     public final String name;
     public final int id;

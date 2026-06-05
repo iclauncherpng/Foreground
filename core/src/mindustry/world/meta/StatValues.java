@@ -503,6 +503,19 @@ public class StatValues{
         };
     }
 
+    public static StatValue diplomacyPlace(boolean isInWhitelist){
+        return table -> {
+            if(isInWhitelist){
+                if(table.getCells().size > 0) table.getCells().peek().growX();
+                table.row();
+                table.table(t -> {
+                    t.image(Icon.infoCircle.getRegion()).color(Pal.accent).size(16).padRight(6);
+                    t.add("@stat.neutralterritorywhitelist").left();
+                }).left().padTop(24).growX().colspan(table.getColumns()).row();
+            }
+        };
+    }
+
     public static StatValue speedBoosters(String unit, float amount, float speed, boolean strength, Boolf<Liquid> filter){
         return table -> {
             table.row();

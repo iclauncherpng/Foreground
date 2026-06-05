@@ -104,7 +104,8 @@ public class Stat implements Comparable<Stat>{
     booster = new Stat("booster", StatCat.optional),
     boostEffect = new Stat("boostEffect", StatCat.optional),
     affinities = new Stat("affinities", StatCat.optional),
-    opposites = new Stat("opposites", StatCat.optional);
+    opposites = new Stat("opposites", StatCat.optional),
+    neutralwl = new Stat("neutralwl", StatCat.diplomacyRebalance);
 
     public final StatCat category;
     public final String name;
