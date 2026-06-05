@@ -5,12 +5,20 @@ import arc.math.geom.Geometry;
 import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.world.blocks.distribution.StackConveyor;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatValues;
 
 import static mindustry.Vars.*;
 
 public class TradeConveyor extends StackConveyor {
     public TradeConveyor(String name){
         super(name);
+    }
+
+    @Override
+    public void setStats(){
+        super.setStats();
+        stats.add(Stat.neutralwl, t -> t.add("@drnl.free"));
     }
 
     public class TradeConveyorBuild extends StackConveyorBuild {

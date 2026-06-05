@@ -19,6 +19,9 @@ import mindustry.world.consumers.*;
 import mindustry.game.*;
 import mindustry.entities.bullet.*;
 import mindustry.type.*;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
+import mindustry.world.meta.StatValues;
 
 import static mindustry.Vars.*;
 
@@ -37,6 +40,12 @@ public class TowerBlock extends Wall {
         sync = true;
         configurable = true;
         saveData = true;
+    }
+
+    @Override
+    public void setStats(){
+        super.setStats();
+        stats.add(Stat.neutralwl, t -> t.add("@drnl.buffer"));
     }
 
     @Override

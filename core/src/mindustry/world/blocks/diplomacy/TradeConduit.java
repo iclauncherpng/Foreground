@@ -7,12 +7,19 @@ import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.liquid.Conduit;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatValues;
 
 import static mindustry.Vars.*;
 
 public class TradeConduit extends Conduit {
     public TradeConduit(String name){
         super(name);
+    }
+
+    @Override
+    public void setStats(){
+        stats.add(Stat.neutralwl, t -> t.add("@drnl.free"));
     }
 
     public class TradeConduitBuild extends ConduitBuild {
