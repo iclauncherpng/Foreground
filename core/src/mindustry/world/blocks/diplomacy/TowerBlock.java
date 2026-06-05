@@ -22,10 +22,11 @@ import mindustry.type.*;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
+import mindustry.annotations.Annotations.*;
 
 import static mindustry.Vars.*;
 
-public class TowerBlock extends Wall {
+public class TowerBlock extends Block {
     public int tier = 1;
     public BulletType shootBullet = Bullets.fireball;
 
@@ -40,7 +41,23 @@ public class TowerBlock extends Wall {
         sync = true;
         configurable = true;
         saveData = true;
+        buildCostMultiplier = 2f;
     }
+
+    @Override
+    public void load(){
+        super.load();
+        this.teamRegion = Core.atlas.find(name + "-team");
+    }
+
+    @Override
+    public TextureRegion[] getGeneratedIcons(){
+        return new TextureRegion[]{
+                Core.atlas.find(name),
+                Core.atlas.find(name + "-team-sharded", teamRegion)
+        };
+    }
+
 
     @Override
     public void setStats(){
@@ -75,7 +92,7 @@ public class TowerBlock extends Wall {
         return !TerritorySystem.isEnemyTerritory(tile.x, tile.y, team);
     }
 
-    public class TowerBuild extends WallBuild {
+    public class TowerBuild extends Building {
         public float reload = 0f;
         public float smoothRadius = 0f;
         public float hit = 0f;
@@ -93,7 +110,7 @@ public class TowerBlock extends Wall {
                 }).size(50f).disabled(b -> !canUpgrade()).tooltip("@dtower.upgrade");
 
                 all.table(t -> {
-                    t.background(Tex.pane); 
+                    t.background(Tex.pane);
                     t.margin(6f);
                     for(ItemStack stack : next.requirements){
                         t.table(s -> {
@@ -107,7 +124,7 @@ public class TowerBlock extends Wall {
                         }).left().pad(1f);
                         t.row();
                     }
-                }).padLeft(6f); 
+                }).padLeft(6f);
             });
         }
 
@@ -138,6 +155,8 @@ public class TowerBlock extends Wall {
             if(tier == 2) return Blocks.dipTowerTear3;
             return null;
         }
+
+
 
         @Override
         public void updateTile(){
