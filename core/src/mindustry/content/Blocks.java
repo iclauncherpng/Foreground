@@ -21,9 +21,7 @@ import mindustry.world.blocks.*;
 import mindustry.world.blocks.campaign.*;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
-import mindustry.world.blocks.diplomacy.TowerBlock;
-import mindustry.world.blocks.diplomacy.TradeConduit;
-import mindustry.world.blocks.diplomacy.TradeConveyor;
+import mindustry.world.blocks.diplomacy.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.heat.*;
@@ -198,7 +196,7 @@ public class Blocks{
     //diplomacy
     dipTowerTear1, dipTowerTear2,
     dipTowerTear3, dipTowerTear4, dipTowerTear5,
-    tradeConveyor, tradeConduit
+    tradeConveyor, tradeConduit, tradePhaseConveyor, tradeNode
     ;
 
     public static void load(){
@@ -7093,6 +7091,28 @@ public class Blocks{
             itemCapacity = 5;
         }};
 
+        tradePhaseConveyor = new TradeBridge("trade-phase-conveyor"){{
+            requirements(Category.distribution, with(Items.phaseFabric, 5, Items.silicon, 7, Items.lead, 10, Items.graphite, 32));
+            buildVisibility = BuildVisibility.diplomacyOnly;
+            range = 12;
+            transportTime = 2f;
+            arrowPeriod = 0.9f;
+            arrowTimeScl = 2.75f;
+            hasPower = true;
+            pulse = true;
+            envEnabled |= Env.space;
+            consumePower(0.60f);
+        }};
+
+
+        tradeNode = new tradePowerNode("trade-node"){{
+            requirements(Category.power, with(Items.copper, 4, Items.lead, 6, Items.graphite, 8));
+            buildVisibility = BuildVisibility.diplomacyOnly;
+            maxNodes = 2;
+            laserRange = 6;
+            underBullets = true;
+            crushFragile = true;
+        }};
 
 
 
