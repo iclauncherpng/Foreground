@@ -265,7 +265,7 @@ public class CoreBlock extends StorageBlock{
             if(TerritorySystem.territoryMap != null && tile.x >= 0 && tile.y >= 0 && tile.x < world.width() && tile.y < world.height()){
                 byte currentTeamId = TerritorySystem.territoryMap[tile.x][tile.y];
                 boolean isOwnTerritory = (currentTeamId == team.id);
-                if(!isOwnTerritory){
+                if(state.rules.diplomacy && !isOwnTerritory){
                     if(isCoreBlock && isOnCoreZone){
                         CoreBuild core = team.core();
                         if(state.isEditor() || state.rules.infiniteResources || (core != null && core.items.has(requirements, state.rules.buildCostMultiplier))){
