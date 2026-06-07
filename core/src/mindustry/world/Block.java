@@ -622,7 +622,7 @@ public class Block extends UnlockableContent implements Senseable{
             if(isCoreBlock && isOnCoreZone){
                 return canPlaceOn(tile, team, rotation);
             }
-            if(!(this instanceof TradeConveyor) && !(this instanceof TradeConduit) && !(this instanceof TradeBridge) && !(this instanceof tradePowerNode)) return false;
+            if(!(this instanceof TradeConveyor) && !(this instanceof TradeConduit) && !(this instanceof TradeBridge) && !(this instanceof TradePowerNode)) return false;
         }
         return canPlaceOn(tile, team, rotation);
     }

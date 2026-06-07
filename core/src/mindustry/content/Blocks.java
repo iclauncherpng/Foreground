@@ -196,7 +196,7 @@ public class Blocks{
     //diplomacy
     dipTowerTear1, dipTowerTear2,
     dipTowerTear3, dipTowerTear4, dipTowerTear5,
-    tradeConveyor, tradeConduit, tradePhaseConveyor, tradeNode
+    tradeConveyor, tradeConduit, tradePhaseConveyor, tradeNode, powerTransformer
     ;
 
     public static void load(){
@@ -7105,7 +7105,7 @@ public class Blocks{
         }};
 
 
-        tradeNode = new tradePowerNode("trade-node"){{
+        tradeNode = new TradePowerNode("trade-node"){{
             requirements(Category.power, with(Items.copper, 4, Items.lead, 6, Items.graphite, 8));
             buildVisibility = BuildVisibility.diplomacyOnly;
             maxNodes = 2;

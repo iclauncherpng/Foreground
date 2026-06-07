@@ -24,7 +24,7 @@ import mindustry.world.modules.*;
 
 import static mindustry.Vars.*;
 
-public class tradePowerNode extends PowerBlock {
+public class TradePowerNode extends PowerBlock {
     protected static BuildPlan otherReq;
     protected static int returnInt = 0;
     protected final static ObjectSet<PowerGraph> graphs = new ObjectSet<>();
@@ -41,7 +41,7 @@ public class tradePowerNode extends PowerBlock {
     public Color laserColor1 = Color.valueOf("d5e4f5");  
     public Color laserColor2 = Color.valueOf("a0b0d8");  
 
-    public tradePowerNode(String name){
+    public TradePowerNode(String name){
         super(name);
         configurable = true;
         consumesPower = false;
@@ -215,11 +215,11 @@ public class tradePowerNode extends PowerBlock {
         if(!autolink) return;
 
         Boolf<Building> valid = other -> other != null && other.tile != tile && other.block.connectedPower && other.power != null &&
-            (other.block.outputsPower || other.block.consumesPower || other.block instanceof tradePowerNode) &&
+            (other.block.outputsPower || other.block.consumesPower || other.block instanceof TradePowerNode) &&
             overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile, laserRange * tilesize) && other.team == team &&
             !graphs.contains(other.power.graph) &&
-            !tradePowerNode.insulated(tile, other.tile) &&
-            !(other instanceof tradePowerNodeBuild obuild && obuild.power.links.size >= ((tradePowerNode)obuild.block).maxNodes) &&
+            !TradePowerNode.insulated(tile, other.tile) &&
+            !(other instanceof TradePowerNodeBuild obuild && obuild.power.links.size >= ((TradePowerNode)obuild.block).maxNodes) &&
             !Structs.contains(Edges.getEdges(size), p -> { //do not link to adjacent buildings
                 var t = world.tile(tile.x + p.x, tile.y + p.y);
                 return t != null && t.build == other;
@@ -251,7 +251,7 @@ public class tradePowerNode extends PowerBlock {
         }
 
         tempBuilds.sort((a, b) -> {
-            int type = -Boolean.compare(a.block instanceof tradePowerNode, b.block instanceof tradePowerNode);
+            int type = -Boolean.compare(a.block instanceof TradePowerNode, b.block instanceof TradePowerNode);
             if(type != 0) return type;
             return Float.compare(a.dst2(tile), b.dst2(tile));
         });
@@ -269,12 +269,12 @@ public class tradePowerNode extends PowerBlock {
     //TODO code duplication w/ method above?
     /** Iterates through linked nodes of a block at a tile. All returned buildings are power nodes. */
     public static void getNodeLinks(Tile tile, Block block, Team team, Cons<Building> others){
-        Boolf<Building> valid = other -> other != null && other.tile != tile && other.block instanceof tradePowerNode node &&
+        Boolf<Building> valid = other -> other != null && other.tile != tile && other.block instanceof TradePowerNode node &&
         node.autolink &&
         other.power.links.size < node.maxNodes &&
         node.overlaps(other.x, other.y, tile, block, node.laserRange * tilesize) && other.team == team
         && !graphs.contains(other.power.graph) &&
-        !tradePowerNode.insulated(tile, other.tile) &&
+        !TradePowerNode.insulated(tile, other.tile) &&
         !Structs.contains(Edges.getEdges(block.size), p -> { //do not link to adjacent buildings
             var t = world.tile(tile.x + p.x, tile.y + p.y);
             return t != null && t.build == other;
@@ -307,7 +307,7 @@ public class tradePowerNode extends PowerBlock {
         }
 
         tempBuilds.sort((a, b) -> {
-            int type = -Boolean.compare(a.block instanceof tradePowerNode, b.block instanceof tradePowerNode);
+            int type = -Boolean.compare(a.block instanceof TradePowerNode, b.block instanceof TradePowerNode);
             if(type != 0) return type;
             return Float.compare(a.dst2(tile), b.dst2(tile));
         });
@@ -351,11 +351,13 @@ public class tradePowerNode extends PowerBlock {
     }
 
     public boolean linkValid(Building tile, Building link, boolean checkMaxNodes){
-        if(tile == link || link == null || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team || (sameBlockConnection && tile.block != link.block)) return false;
-
-        if(overlaps(tile, link, laserRange * tilesize) || (link.block instanceof tradePowerNode node && overlaps(link, tile, node.laserRange * tilesize))){
-            if(checkMaxNodes && link.block instanceof tradePowerNode node){
-                return link.power.links.size < node.maxNodes || link.power.links.contains(tile.pos());
+        if(link == null || tile == link || !link.block.hasPower || !link.block.connectedPower) return false;
+        boolean isTradeNode = link.block instanceof TradePowerNode;
+        if(!isTradeNode && tile.team != link.team) return false;
+        if(sameBlockConnection && tile.block != link.block) return false;
+        if(overlaps(tile, link, laserRange * tilesize) || (isTradeNode && overlaps(link, tile, ((TradePowerNode)link.block).laserRange * tilesize))){
+            if(checkMaxNodes && isTradeNode){
+                return link.power.links.size < ((TradePowerNode)link.block).maxNodes || link.power.links.contains(tile.pos());
             }
             return true;
         }
@@ -377,7 +379,7 @@ public class tradePowerNode extends PowerBlock {
         });
     }
 
-    public class tradePowerNodeBuild extends Building{
+    public class TradePowerNodeBuild extends Building{
 
         @Override
         public void created(){ // Called when one is placed/loaded in the world
@@ -492,7 +494,7 @@ public class tradePowerNode extends PowerBlock {
 
                 if(!linkValid(this, link)) continue;
 
-                if(link.block instanceof tradePowerNode && link.id >= id) continue;
+                if(link.block instanceof TradePowerNode && link.id >= id) continue;
 
                 drawLaser(x, y, link.x, link.y, size, link.block.size);
             }
