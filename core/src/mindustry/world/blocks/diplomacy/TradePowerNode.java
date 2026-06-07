@@ -58,35 +58,18 @@ public class TradePowerNode extends PowerBlock {
         update = false;
 
         config(Integer.class, (entity, value) -> {
-            PowerModule power = entity.power;
             Building other = world.build(value);
-            boolean contains = power.links.contains(value), valid = other != null && other.power != null;
+            boolean valid = other != null && other.power != null;
 
-            if(contains){
-                //unlink
-                power.links.removeValue(value);
+            if(entity.power.links.contains(value)){
+                entity.power.links.removeValue(value);
                 if(valid) other.power.links.removeValue(entity.pos());
-
-                PowerGraph newgraph = new PowerGraph();
-
-                //reflow from this point, covering all tiles on this side
-                newgraph.reflow(entity);
-
-                if(valid && other.power.graph != newgraph){
-                    //create new graph for other end
-                    PowerGraph og = new PowerGraph();
-                    //reflow from other end
-                    og.reflow(other);
-                }
-            }else if(linkValid(entity, other) && valid && power.links.size < maxNodes){
-
-                power.links.addUnique(other.pos());
-
-                if(other.team == entity.team){
-                    other.power.links.addUnique(entity.pos());
-                }
-
-                power.graph.addGraph(other.power.graph);
+                new PowerGraph().reflow(entity);
+                if(valid) new PowerGraph().reflow(other);
+            } else if(valid && linkValid(entity, other, true)){
+                entity.power.links.addUnique(value);
+                other.power.links.addUnique(entity.pos());
+                entity.power.graph.addGraph(other.power.graph);
             }
         });
 
@@ -388,6 +371,19 @@ public class TradePowerNode extends PowerBlock {
             super.created();
         }
 
+
+        @Override
+        public void updatePowerGraph(){
+            super.updatePowerGraph();
+            for(int i = 0; i < power.links.size; i++){
+                Building other = world.build(power.links.get(i));
+                if(other != null && other.power != null){
+                    if(other.power.graph != power.graph){
+                        power.graph.addGraph(other.power.graph);
+                    }
+                }
+            }
+        }
 
         @Override
         public void placed(){
