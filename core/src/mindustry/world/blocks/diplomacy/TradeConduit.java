@@ -19,6 +19,7 @@ public class TradeConduit extends Conduit {
 
     @Override
     public void setStats(){
+        super.setStats();
         stats.add(Stat.neutralwl, t -> t.add("@drnl.free"));
     }
 
