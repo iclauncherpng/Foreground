@@ -196,7 +196,7 @@ public class Blocks{
     //diplomacy
     dipTowerTear1, dipTowerTear2,
     dipTowerTear3, dipTowerTear4, dipTowerTear5,
-    tradeConveyor, tradeConduit, tradePhaseConveyor, tradeNode, powerTransformer
+    tradeConveyor, tradeConduit, tradePhaseConveyor, tradeNode, tradeNodeLarge, tradeMassDriver, powerTransformer
     ;
 
     public static void load(){
@@ -7112,6 +7112,25 @@ public class Blocks{
             laserRange = 6;
             underBullets = true;
             crushFragile = true;
+        }};
+
+        tradeNodeLarge = new TradePowerNode("trade-node-large"){{
+            requirements(Category.power, with(Items.titanium, 10, Items.lead, 15, Items.silicon, 6, Items.graphite, 20));
+            buildVisibility = BuildVisibility.diplomacyOnly;
+            size = 2;
+            maxNodes = 4;
+            laserRange = 15f;
+            underBullets = true;
+            crushFragile = true;
+        }};
+
+        tradeMassDriver = new TradeMassDriver("trade-mass-driver"){{
+            requirements(Category.distribution, with(Items.titanium, 125, Items.silicon, 75, Items.lead, 125, Items.thorium, 50, Items.graphite, 200));
+            size = 3;
+            itemCapacity = 70;
+            reload = 350f;
+            range = 440f;
+            consumePower(2.75f);
         }};
 
 
