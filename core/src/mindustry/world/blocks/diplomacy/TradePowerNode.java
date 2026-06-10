@@ -198,15 +198,15 @@ public class TradePowerNode extends PowerBlock {
         if(!autolink) return;
 
         Boolf<Building> valid = other -> other != null && other.tile != tile && other.block.connectedPower && other.power != null &&
-            (other.block.outputsPower || other.block.consumesPower || other.block instanceof TradePowerNode) &&
-            overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile, laserRange * tilesize) && other.team == team &&
-            !graphs.contains(other.power.graph) &&
-            !TradePowerNode.insulated(tile, other.tile) &&
-            !(other instanceof TradePowerNodeBuild obuild && obuild.power.links.size >= ((TradePowerNode)obuild.block).maxNodes) &&
-            !Structs.contains(Edges.getEdges(size), p -> { //do not link to adjacent buildings
-                var t = world.tile(tile.x + p.x, tile.y + p.y);
-                return t != null && t.build == other;
-            });
+                (other.block.outputsPower || other.block.consumesPower || other.block instanceof TradePowerNode) &&
+                overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile, laserRange * tilesize) &&
+                !graphs.contains(other.power.graph) &&
+                !TradePowerNode.insulated(tile, other.tile) &&
+                !(other instanceof TradePowerNodeBuild obuild && obuild.power.links.size >= ((TradePowerNode)obuild.block).maxNodes) &&
+                !Structs.contains(Edges.getEdges(size), p -> { //do not link to adjacent buildings
+                    var t = world.tile(tile.x + p.x, tile.y + p.y);
+                    return t != null && t.build == other;
+                });
 
         tempBuilds.clear();
         graphs.clear();
@@ -214,7 +214,7 @@ public class TradePowerNode extends PowerBlock {
         //add conducting graphs to prevent double link
         for(var p : Edges.getEdges(size)){
             Tile other = tile.nearby(p);
-            if(other != null && other.team() == team && other.build != null && other.build.power != null){
+            if(other != null && other.build != null && other.build.power != null){
                 graphs.add(other.build.power.graph);
             }
         }
@@ -269,7 +269,7 @@ public class TradePowerNode extends PowerBlock {
         //add conducting graphs to prevent double link
         for(var p : Edges.getEdges(block.size)){
             Tile other = tile.nearby(p);
-            if(other != null && other.team() == team && other.build != null && other.build.power != null
+            if(other != null && other.build != null && other.build.power != null
                 && !(block.consumesPower && other.block().consumesPower && !block.outputsPower && !other.block().outputsPower)){
                 graphs.add(other.build.power.graph);
             }
@@ -336,7 +336,7 @@ public class TradePowerNode extends PowerBlock {
     public boolean linkValid(Building tile, Building link, boolean checkMaxNodes){
         if(link == null || tile == link || !link.block.hasPower || !link.block.connectedPower) return false;
         boolean isTradeNode = link.block instanceof TradePowerNode;
-        if(!isTradeNode && tile.team != link.team) return false;
+
         if(sameBlockConnection && tile.block != link.block) return false;
         if(overlaps(tile, link, laserRange * tilesize) || (isTradeNode && overlaps(link, tile, ((TradePowerNode)link.block).laserRange * tilesize))){
             if(checkMaxNodes && isTradeNode){
@@ -379,10 +379,29 @@ public class TradePowerNode extends PowerBlock {
                 Building other = world.build(power.links.get(i));
                 if(other != null && other.power != null){
                     if(other.power.graph != power.graph){
-                        power.graph.addGraph(other.power.graph);
+                        PowerGraph target = power.graph;
+                        PowerGraph source = other.power.graph;
+                        for(Building b : source.all.toArray()){
+                            if(b.power != null){
+                                b.power.graph = target;
+                                target.add(b);
+                            }
+                        }
+                        source.clear();
                     }
                 }
             }
+        }
+
+        @Override
+        public Seq<Building> getPowerConnections(Seq<Building> out){
+            for(int i = 0; i < power.links.size; i++){
+                Building link = world.build(power.links.get(i));
+                if(link != null && link.power != null && !out.contains(link)){
+                    out.add(link);
+                }
+            }
+            return out;
         }
 
         @Override
