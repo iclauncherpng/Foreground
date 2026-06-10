@@ -5,6 +5,7 @@ import arc.math.*;
 import mindustry.content.*;
 import mindustry.entities.*;
 import mindustry.gen.*;
+import mindustry.graphics.Drawf;
 import mindustry.type.*;
 import mindustry.world.blocks.diplomacy.TradeMassDriver.*;
 
@@ -22,6 +23,18 @@ public class TradeMassDriverBolt extends BasicBulletType{
         sprite = "shell";
         despawnEffect = Fx.smeltsmoke;
         hitEffect = Fx.hitBulletBig;
+
+        lightRadius = 55f;
+        lightOpacity = 0.9f;
+    }
+
+    @Override
+    public void init(Bullet b){
+        super.init(b);
+
+        if(b.data() instanceof TradeDriverBulletData data){
+            updateBulletColor(b, data);
+        }
     }
 
     @Override
@@ -68,6 +81,16 @@ public class TradeMassDriverBolt extends BasicBulletType{
         if(intersect){
             data.to.handlePayload(b, data);
         }
+
+        updateBulletColor(b, data);
+    }
+
+    @Override
+    public void draw(Bullet b){
+        if(lightRadius > 0 && lightOpacity > 0 && lightColor != null){
+            Drawf.light(b.x, b.y, lightRadius, lightColor, lightOpacity);
+        }
+        super.draw(b);
     }
 
     @Override
@@ -100,6 +123,41 @@ public class TradeMassDriverBolt extends BasicBulletType{
                 power += item.charge * Mathf.pow(data.items[i], 1.1f) * 25f;
             }
             Damage.dynamicExplosion(b.x, b.y, flammability / 10f, explosiveness / 10f, power, 1f, state.rules.damageExplosions);
+        }
+    }
+
+    private void updateBulletColor(Bullet b, TradeDriverBulletData data){
+        if(data == null || data.items == null) return;
+
+        Item primaryItem = null;
+        int maxAmount = 0;
+        int totalItems = 0;
+
+        for(int i = 0; i < data.items.length; i++){
+            int amount = data.items[i];
+            if(amount > 0){
+                totalItems += amount;
+                if(amount > maxAmount){
+                    maxAmount = amount;
+                    primaryItem = content.item(i);
+                }
+            }
+        }
+
+        if(primaryItem == null || totalItems == 0) return;
+
+        Color bulletColor = primaryItem.color;
+
+        this.backColor = bulletColor;
+        this.frontColor = bulletColor;
+        this.hitColor = bulletColor;
+        this.trailColor = bulletColor;
+        this.lightRadius = 55f;
+        this.lightOpacity = 0.9f;
+        this.lightColor = bulletColor;
+
+        if(this.lightColor.r + this.lightColor.g + this.lightColor.b < 0.1f){
+            this.lightColor = Color.white;
         }
     }
 }
