@@ -27,14 +27,14 @@ public class TantrosTurrets {
 
             consumePower(1.2f);
 
-            reload = 50f;
-            rotateSpeed = 7f;
+            reload = 0.001f;
+            rotateSpeed = 404f;
 
             shootSound = Sounds.shoot;
             shootEffect = Fx.shootLiquid;
             smokeEffect = Fx.none;
 
-            shootType = new BasicBulletType(17f, 15){{
+            shootType = new BasicBulletType(57f, 45){{
                 width = 2.5f;
                 height = 16f;
 
