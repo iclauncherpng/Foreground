@@ -7105,9 +7105,10 @@ public class Blocks{
         }};
 
 
-        tradeNode = new TradePowerNode("trade-node"){{
+        tradeNode = new SpecialPowerNode("trade-node"){{
             requirements(Category.power, with(Items.copper, 4, Items.lead, 6, Items.graphite, 8));
             buildVisibility = BuildVisibility.diplomacyOnly;
+            health = 25;
             maxNodes = 2;
             laserRange = 6;
             underBullets = true;
@@ -7115,8 +7116,8 @@ public class Blocks{
         }};
 
         tradeNodeLarge = new TradePowerNode("trade-node-large"){{
-            requirements(Category.power, with(Items.titanium, 10, Items.lead, 15, Items.silicon, 6, Items.graphite, 20));
-            buildVisibility = BuildVisibility.diplomacyOnly;
+            requirements(Category.experiments, with(Items.titanium, 10, Items.lead, 15, Items.silicon, 6, Items.graphite, 20));
+            buildVisibility = BuildVisibility.sandboxOnly;
             size = 2;
             maxNodes = 4;
             laserRange = 15f;
