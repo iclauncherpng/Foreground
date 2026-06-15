@@ -121,11 +121,11 @@ public class TradePowerNode extends PowerBlock {
 
     @Override
     public void setStats(){
-        super.setStats();
+        //super.setStats();
 
-        stats.add(Stat.powerRange, laserRange, StatUnit.blocks);
-        stats.add(Stat.powerConnections, maxNodes, StatUnit.none);
-        stats.add(Stat.neutralwl, t -> t.add("@drnl.free"));
+        //stats.add(Stat.powerRange, laserRange, StatUnit.blocks);
+        //stats.add(Stat.powerConnections, maxNodes, StatUnit.none);
+        //stats.add(Stat.neutralwl, t -> t.add("@drnl.free"));
     }
 
     @Override
