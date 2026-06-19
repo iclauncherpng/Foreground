@@ -4729,6 +4729,20 @@ public class Blocks{
 
                 lightColor = hitColor = flareColor;
             }}
+//            Liquids.neoplasmgas, new ContinuousFlameBulletType(){{
+//                damage = 230f;
+//                rangeChange = 90f;
+//                ammoMultiplier = 0.6f;
+//                length = r + rangeChange;
+//                knockback = 4f;
+//                pierceCap = 0;
+//                buildingDamageMultiplier = 0f;
+//                timescaleDamage = true;
+//
+//                colors = new Color[]{Color.valueOf("9e172c").a(0.55f), Color.valueOf("e05438").a(0.7f), Color.valueOf("f98f4a").a(0.8f), Color.valueOf("ffdc96"), Color.white};flareColor = Color.valueOf("89e8b6");
+//                flareColor = Color.valueOf("f98f4a");
+//                lightColor = hitColor = flareColor;
+//            }}
             );
 
             scaledHealth = 210;
@@ -7110,7 +7124,7 @@ public class Blocks{
             buildVisibility = BuildVisibility.diplomacyOnly;
             health = 25;
             maxNodes = 2;
-            laserRange = 6;
+            laserRange = 8;
             underBullets = true;
             crushFragile = true;
         }};
