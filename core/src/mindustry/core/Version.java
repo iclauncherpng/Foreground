@@ -109,6 +109,6 @@ public class Version{
         }
         String hash = commitHash.equals("unknown") ? "" : " (" + commitHash + ")";
 
-        return result + hash;
+        return result + signString() + hash;
     }
 }
