@@ -107,7 +107,7 @@ public class MenuFragment{
         }
 
         //String versionText = ((Version.build == -1) ? "[#fc8140aa]" : "[#ffffffba]") + Version.combined() + "\n[#70baffba]Tantros Preview";
-        String versionText = /*"[#f54260ba]Overhaul Update\n" +*/ ((Version.build.equals("-1")) ? "[#fc8140aa]" : "[#ffffffba]") + Version.combined();
+        String versionText = "[#ff9d2eba]Diplomacy Rework Update\n" + ((Version.build.equals("-1")) ? "[#fc8140aa]" : "[#ffffffba]") + Version.combined();
         parent.fill((x, y, w, h) -> {
             TextureRegion logo = Core.atlas.find("logo");
             float width = Core.graphics.getWidth(), height = Core.graphics.getHeight() - Core.scene.marginTop;
@@ -122,17 +122,12 @@ public class MenuFragment{
             }
 
             if(Version.modifier.contains("canary") || !Version.sign.isEmpty()){
-                float yOffset = fy - logoh/2f - Scl.scl(22f);
+                float yOffset = fy - logoh/2f - Scl.scl(40f);
 
                 if(Version.modifier.contains("canary")){
                     Fonts.outline.setColor(Pal.accent);
                     Fonts.outline.draw("[red]⚠ Unstable Indev Build ⚠", fx, yOffset, Align.center);
-                    yOffset -= Scl.scl(22f);
-                }
-
-                if(!Version.sign.isEmpty()){
-                    Fonts.outline.setColor(Pal.accent);
-                    Fonts.outline.draw("[green]⚠ IBS" + Version.signString() + " ⚠", fx, yOffset, Align.center);
+                    yOffset -= Scl.scl(40f);
                 }
             }
 
