@@ -1,5 +1,6 @@
 package mindustry.world.blocks.defense.turrets;
 
+import arc.math.Mathf;
 import arc.struct.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
@@ -8,9 +9,10 @@ import mindustry.logic.*;
 import mindustry.type.*;
 import mindustry.world.consumers.*;
 import mindustry.world.meta.*;
+import arc.util.*;
 
 public class ContinuousLiquidTurret extends ContinuousTurret{
-    public ObjectMap<Liquid, BulletType> ammoTypes = new ObjectMap<>();
+    public OrderedMap<Liquid, BulletType> ammoTypes = new OrderedMap<>();
     public float liquidConsumed = 1f / 60f;
 
     public ContinuousLiquidTurret(String name){
@@ -25,7 +27,7 @@ public class ContinuousLiquidTurret extends ContinuousTurret{
 
     /** Initializes accepted ammo map. Format: [liquid1, bullet1, liquid2, bullet2...] */
     public void ammo(Object... objects){
-        ammoTypes = ObjectMap.of(objects);
+        for(int i = 0; i < objects.length; i += 2) ammoTypes.put((Liquid)objects[i], (BulletType)objects[i+1]);
     }
 
     @Override
@@ -34,7 +36,7 @@ public class ContinuousLiquidTurret extends ContinuousTurret{
         //mirror stats onto each bullet (purely visual)
         ammoTypes.each((l, b) -> b.statLiquidConsumed = liquidConsumed);
 
-        stats.replace(Stat.ammo, StatValues.ammo(ammoTypes));
+        stats.replace(Stat.ammo, StatValues.orderedAmmo(ammoTypes, name));
     }
 
     @Override
@@ -82,6 +84,8 @@ public class ContinuousLiquidTurret extends ContinuousTurret{
                 activated = false;
             }
         }
+
+
 
         @Override
         public Object senseObject(LAccess sensor){
